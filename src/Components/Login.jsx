@@ -3,6 +3,9 @@ import { useState } from "react";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [csrfToken, setCsrfToken] = useState("");
+  const [jwtToken, setJwtToken] = useState("");
+
 
   return (
     <div>
@@ -11,6 +14,7 @@ const Login = () => {
         <label htmlFor="">Username</label>
         <input
           type="text"
+          id="username"
           placeholder="Username..."
           value={username}
           onChange={(e) => setUsername(e.target.value)}
@@ -18,7 +22,8 @@ const Login = () => {
         />
         <label htmlFor="">Password</label>
         <input
-          type="text"
+          type="password"
+          id="password"
           placeholder="Password..."
           value={password}
           onChange={(e) => setPassword(e.target.value)}
