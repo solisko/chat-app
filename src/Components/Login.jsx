@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [csrfToken, setCsrfToken] = useState("");
-  const [jwtToken, setJwtToken] = useState("");
-
+  const [error, setError] = useState("");
 
   return (
     <div>
