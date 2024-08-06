@@ -3,30 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { ChatContext } from "../Context/ChatContextProvider";
 
 const Register = () => {
-  const { fetchCsrfToken } = useContext(ChatContext);
+  const { csrfToken, fetchCsrfToken } = useContext(ChatContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [avatar, setAvatar] = useState(null);
-  //   const [csrfToken, setCsrfToken] = useState("");
+  const [avatar, setAvatar] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
-  //   const fetchCsrfToken = async () => {
-  //     try {
-  //       const response = await fetch("https://chatify-api.up.railway.app/csrf", {
-  //         method: "PATCH",
-  //         credentials: "include",
-  //       });
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch CSRF token");
-  //       }
-  //       const data = await response.json();
-  //       setCsrfToken(data.csrfToken);
-  //     } catch (error) {
-  //       console.error("Failed to fetch CSRF token:", error.message);
-  //     }
-  //   };
 
   useEffect(() => {
     fetchCsrfToken();
@@ -43,15 +26,14 @@ const Register = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "CSRF-Token": csrfToken,
           },
           body: JSON.stringify({
             username,
             password,
             email,
             avatar,
+            csrfToken,
           }),
-          credentials: "include",
         }
       );
       if (!response.ok) {
@@ -92,15 +74,16 @@ const Register = () => {
         />
         <label htmlFor="">Avatar</label>
         <input
-          type="file"
+          type="text"
           id="avatar"
-          accept="image/*"
+          value={avatar}
           onChange={(e) => setAvatar(e.target.value)}
+          required
         />
         <label htmlFor="">Password</label>
         <input
           type="password"
-          id="pssword"
+          id="password"
           placeholder="Password..."
           value={password}
           onChange={(e) => setPassword(e.target.value)}

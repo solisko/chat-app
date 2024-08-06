@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 
 export const ChatContext = createContext();
 
@@ -9,7 +9,9 @@ const ChatProvider = (props) => {
     try {
       const response = await fetch("https://chatify-api.up.railway.app/csrf", {
         method: "PATCH",
-        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
       if (!response.ok) {
         throw new Error("Failed to fetch CSRF token");
@@ -22,7 +24,7 @@ const ChatProvider = (props) => {
   };
 
   return (
-    <ChatContext.Provider value={{ fetchCsrfToken }}>
+    <ChatContext.Provider value={{csrfToken, fetchCsrfToken }}>
       {props.children}
     </ChatContext.Provider>
   );
