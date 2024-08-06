@@ -4,6 +4,11 @@ export const ChatContext = createContext();
 
 const ChatProvider = (props) => {
   const [csrfToken, setCsrfToken] = useState("");
+  const [jwtToken, setJwtToken] = useState(
+    () => localStorage.getItem("jwtToken") || ""
+  );
+
+  const [isAuthenticated, setIsAuthenticated] = useState(!!jwtToken);
 
   const fetchCsrfToken = async () => {
     try {
@@ -23,8 +28,28 @@ const ChatProvider = (props) => {
     }
   };
 
+  const login = (token) => {
+    setJwtToken(token);
+    localStorage.setItem("jwtToken", token);
+    setIsAuthenticated(true);
+  };
+  const logout = () => {
+    setJwtToken("");
+    localStorage.removeItem("jwtToken");
+    setIsAuthenticated(false);
+  };
+
   return (
-    <ChatContext.Provider value={{csrfToken, fetchCsrfToken }}>
+    <ChatContext.Provider
+      value={{
+        csrfToken,
+        fetchCsrfToken,
+        jwtToken,
+        isAuthenticated,
+        login,
+        logout,
+      }}
+    >
       {props.children}
     </ChatContext.Provider>
   );
