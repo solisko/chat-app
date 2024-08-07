@@ -8,6 +8,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState("");
+  const [avatarFile, setAvatarFile] = useState(null);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -15,11 +16,45 @@ const Register = () => {
     fetchCsrfToken();
   }, []);
 
+  const handleFileChange = (e) => {
+    setAvatarFile(e.target.files[0]);
+  };
+
+  const uploadAvatar = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const response = await fetch(
+        "https://api.imgbb.com/1/upload?key=869d77440f66db77da4ba88f816f8aa7",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error.message);
+      }
+      return data.data.url;
+    } catch (error) {
+      console.error("Error uploading avatar:", error);
+      throw error;
+    }
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
+      let avatarUrl = avatar;
+      if (avatarFile) {
+        avatarUrl = await uploadAvatar(avatarFile);
+        setAvatar(avatarUrl);
+      }
+
       const response = await fetch(
         "https://chatify-api.up.railway.app/auth/register",
         {
@@ -31,14 +66,23 @@ const Register = () => {
             username,
             password,
             email,
-            avatar,
+            avatar: avatarUrl,
             csrfToken,
           }),
         }
       );
+      let errorMsg;
       if (!response.ok) {
-        const errorMsg = await response.json();
-        throw new Error(errorMsg.message || "Failed to create user");
+        try {
+          // Försök läsa som JSON
+          const errorData = await response.json();
+          errorMsg = errorData.message;
+        } catch (jsonError) {
+          // Om JSON-parsning misslyckas, läs som text
+          errorMsg = await response.text();
+        }
+
+        throw new Error(errorMsg || "Failed to create user");
       }
       alert(
         "Registered successfully! You are being redirected to the login page."
@@ -54,7 +98,7 @@ const Register = () => {
     <div>
       <h1>Register account</h1>
       <form onSubmit={handleRegister}>
-        <label htmlFor="">Username</label>
+        <label htmlFor="username">Username</label>
         <input
           type="text"
           id="username"
@@ -63,7 +107,7 @@ const Register = () => {
           onChange={(e) => setUsername(e.target.value)}
           required
         />
-        <label htmlFor="">Email</label>
+        <label htmlFor="email">Email</label>
         <input
           type="email"
           id="email"
@@ -72,15 +116,14 @@ const Register = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <label htmlFor="">Avatar</label>
+        <label htmlFor="avatar">Avatar</label>
         <input
-          type="text"
+          type="file"
           id="avatar"
-          value={avatar}
-          onChange={(e) => setAvatar(e.target.value)}
-          required
+          accept="image/*"
+          onChange={handleFileChange}
         />
-        <label htmlFor="">Password</label>
+        <label htmlFor="password">Password</label>
         <input
           type="password"
           id="password"

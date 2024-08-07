@@ -7,10 +7,11 @@ const ChatProvider = (props) => {
   const [jwtToken, setJwtToken] = useState(
     () => localStorage.getItem("jwtToken") || ""
   );
-  const [user, setUser] = useState(
-    () => JSON.parse(localStorage.getItem("user")) || null
-  );
   const [isAuthenticated, setIsAuthenticated] = useState(!!jwtToken);
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
 
   useEffect(() => {
     setIsAuthenticated(!!jwtToken);
@@ -50,28 +51,21 @@ const ChatProvider = (props) => {
       const data = await response.json();
       const user = data.find((user) => user.username === username);
       if (user) {
-        console.log("Found user:", user);
-        return user;
+        setUser(user);
+        localStorage.setItem("user", JSON.stringify(user));
       } else {
         console.error("User not found for username:", username);
-        return null;
       }
     } catch (error) {
       console.error("Failed to fetch user info:", error);
-      return null;
     }
   };
 
   const login = async (token, username) => {
     setJwtToken(token);
     localStorage.setItem("jwtToken", token);
-
-    const userData = await fetchUser(token, username);
-    if (userData) {
-      setUser(userData);
-      localStorage.setItem("user", JSON.stringify(userData));
-      setIsAuthenticated(true);
-    }
+    await fetchUser(token, username);
+    setIsAuthenticated(true);
   };
 
   const logout = () => {
