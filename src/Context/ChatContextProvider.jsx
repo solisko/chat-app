@@ -48,8 +48,6 @@ const ChatProvider = (props) => {
         throw new Error("Failed to fetch user info");
       }
       const data = await response.json();
-      console.log("Fetched users data:", data);
-
       const user = data.find((user) => user.username === username);
       if (user) {
         console.log("Found user:", user);
