@@ -5,7 +5,6 @@ import defaultAvatar from "../assets/img/astronaut.png"; // Importera standardbi
 
 const isValidUrl = (url) => {
   try {
-    // Kontrollera om URL:en är en riktig URL
     new URL(url);
     return true;
   } catch (e) {

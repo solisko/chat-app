@@ -74,11 +74,9 @@ const Register = () => {
       let errorMsg;
       if (!response.ok) {
         try {
-          // Försök läsa som JSON
           const errorData = await response.json();
           errorMsg = errorData.message;
         } catch (jsonError) {
-          // Om JSON-parsning misslyckas, läs som text
           errorMsg = await response.text();
         }
 
