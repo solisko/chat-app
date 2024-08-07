@@ -38,7 +38,7 @@ const Login = () => {
       }
       const data = await response.json();
       console.log("Received token:", data.token);
-      login(data.token);
+      await login(data.token, username);
       alert("Login successfully! You are being redirected to the chat page.");
       navigate("/chat");
     } catch (error) {
