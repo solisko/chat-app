@@ -6,7 +6,6 @@ const Login = () => {
   const { csrfToken, fetchCsrfToken, login } = useContext(ChatContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [jwtToken, setJwtToken] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -38,6 +37,7 @@ const Login = () => {
         throw new Error(errorMsg.message || "Failed to create user");
       }
       const data = await response.json();
+      console.log("Received token:", data.token);
       login(data.token);
       alert("Login successfully! You are being redirected to the chat page.");
       navigate("/chat");
