@@ -33,8 +33,13 @@ const Login = () => {
         }
       );
       if (!response.ok) {
-        const errorMsg = await response.json();
-        throw new Error(errorMsg.message || "Failed to create user");
+        if (response.status === 401) {
+          setError("Invalid credentials");
+        } else {
+          const errorMsg = await response.json();
+          setError(errorMsg.message || "Failed to login");
+        }
+        return;
       }
       const data = await response.json();
       console.log("Received token:", data.token);
@@ -74,6 +79,7 @@ const Login = () => {
         />
         <button type="submit">Login</button>
       </form>
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };
