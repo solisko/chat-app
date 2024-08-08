@@ -18,7 +18,7 @@ const Chat = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    navigate("/");
   };
 
   const avatarSrc = user?.avatar && isValidUrl(user.avatar) ? user.avatar : defaultAvatar;
