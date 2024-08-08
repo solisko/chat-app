@@ -41,7 +41,7 @@ const Chat = () => {
           {user?.username || "Anonymous"}
         </p>{" "}
       </div>
-      <button onClick={handleLogout}>Logout</button>
+      <button class="btn transition duration-200 ease-in-out hover:bg-primary" onClick={handleLogout}>Logout</button>
     </div>
   );
 };
