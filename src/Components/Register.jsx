@@ -93,45 +93,76 @@ const Register = () => {
   };
 
   return (
-    <div>
-      <h1>Register account</h1>
-      <form onSubmit={handleRegister}>
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          placeholder="Username..."
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          placeholder="Email..."
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <label htmlFor="avatar">Avatar</label>
-        <input
-          type="file"
-          id="avatar"
-          accept="image/*"
-          onChange={handleFileChange}
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          placeholder="Password..."
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Register</button>
-      </form>
+    <div className="flex justify-center">
+      <div className="card bg-neutral text-neutral-content w-96 shadow-xl">
+        <form
+          onSubmit={handleRegister}
+          className="card-body items-center text-center"
+        >
+          <h2 className="card-title">Register</h2>
+          <div className="form-control">
+            <label htmlFor="username" className="label">
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              placeholder="Username..."
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="input input-ghost w-full max-w-xs"
+              required
+            />
+            <label htmlFor="email" className="label">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              placeholder="Email..."
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="input input-ghost w-full max-w-xs"
+              required
+            />
+            <label htmlFor="avatar" className="label">
+              Avatar
+            </label>
+            <input
+              type="file"
+              id="avatar"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="file-input file-input-ghost w-full max-w-xs"
+            />
+            <label htmlFor="password" className="label">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Password..."
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="input input-ghost w-full max-w-xs"
+              required
+            />
+            <button
+              className="btn btn-primary transition duration-200 ease-in-out hover:bg-primary"
+              type="submit"
+            >
+              Register
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/login")}
+              className="btn btn-link"
+            >
+              Already have an account? Login here!
+            </button>
+          </div>
+        </form>
+      </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
