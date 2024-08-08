@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { ChatContext } from "../Context/ChatContextProvider";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { csrfToken, fetchCsrfToken, login } = useContext(ChatContext);
@@ -56,29 +56,52 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <label htmlFor="">Username</label>
-        <input
-          type="text"
-          id="username"
-          placeholder="Username..."
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <label htmlFor="">Password</label>
-        <input
-          type="password"
-          id="password"
-          placeholder="Password..."
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
+    <div className="flex justify-center">
+      <div className="card bg-neutral text-neutral-content w-96 shadow-xl">
+        <form
+          onSubmit={handleLogin}
+          className="card-body items-center text-center"
+        >
+          <h2 className="card-title">Login</h2>
+          <div className="form-control">
+            <label htmlFor="username" className="label">
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              placeholder="Username..."
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="input input-ghost w-full max-w-xs"
+              required
+            />
+            <label htmlFor="password" className="label">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Password..."
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="input input-ghost w-full max-w-xs"
+              required
+            />
+            <div className="form-control mt-9">
+              <button
+                className="btn btn-primary transition duration-200 ease-in-out hover:bg-primary"
+                type="submit"
+              >
+                Login
+              </button>
+            </div>
+            <Link to="/register" className="btn btn-link">
+              Don't have an account? Register here!
+            </Link>
+          </div>
+        </form>
+      </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );

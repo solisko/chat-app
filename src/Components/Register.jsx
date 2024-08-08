@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ChatContext } from "../Context/ChatContextProvider";
 
 const Register = () => {
@@ -147,19 +147,17 @@ const Register = () => {
               className="input input-ghost w-full max-w-xs"
               required
             />
-            <button
-              className="btn btn-primary transition duration-200 ease-in-out hover:bg-primary"
-              type="submit"
-            >
-              Register
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate("/login")}
-              className="btn btn-link"
-            >
+            <div className="form-control mt-9">
+              <button
+                className="btn btn-primary transition duration-200 ease-in-out hover:bg-primary"
+                type="submit"
+              >
+                Register
+              </button>
+            </div>
+            <Link to="/" className="btn btn-link">
               Already have an account? Login here!
-            </button>
+            </Link>
           </div>
         </form>
       </div>

@@ -12,13 +12,11 @@ function App() {
       <ChatContextProvider>
         <Router>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route
-              path="/chat"
-              element={<ProtectedRoute component={Chat} />}
-            />
+            <Route path="/" element={<Home />}>
+              <Route index element={<Login />} />
+              <Route path="register" element={<Register />} />
+            </Route>
+            <Route path="/chat" element={<ProtectedRoute component={Chat} />} />
           </Routes>
         </Router>
       </ChatContextProvider>
