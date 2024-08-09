@@ -111,6 +111,7 @@ const Register = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="input input-ghost w-full max-w-xs"
+              autoComplete="username"
               required
             />
             <label htmlFor="email" className="label">
@@ -123,6 +124,7 @@ const Register = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="input input-ghost w-full max-w-xs"
+              autoComplete="off"
               required
             />
             <label htmlFor="avatar" className="label">
