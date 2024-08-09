@@ -6,7 +6,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   const { isAuthenticated } = useContext(ChatContext);
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
   return <Component {...rest} />;
 };
