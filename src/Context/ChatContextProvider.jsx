@@ -4,6 +4,23 @@ import { jwtDecode } from "jwt-decode";
 export const ChatContext = createContext();
 
 const ChatProvider = (props) => {
+  
+  const decodeToken = (token) => {
+    try {
+      const decoded = jwtDecode(token);
+      // console.log("Decoded Token:", decoded);
+
+      return {
+        userId: decoded.id,
+        username: decoded.user,
+        avatar: decoded.avatar,
+      };
+    } catch (error) {
+      console.error("Failed to decode token:", error);
+      return null;
+    }
+  };
+
   const [csrfToken, setCsrfToken] = useState("");
   const [jwtToken, setJwtToken] = useState(
     () => localStorage.getItem("jwtToken") || ""
@@ -36,22 +53,6 @@ const ChatProvider = (props) => {
       setCsrfToken(data.csrfToken);
     } catch (error) {
       console.error("Failed to fetch CSRF token:", error.message);
-    }
-  };
-
-  const decodeToken = (token) => {
-    try {
-      const decoded = jwtDecode(token);
-      // console.log("Decoded Token:", decoded);
-
-      return {
-        userId: decoded.id,
-        username: decoded.user,
-        avatar: decoded.avatar,
-      };
-    } catch (error) {
-      console.error("Failed to decode token:", error);
-      return null;
     }
   };
 

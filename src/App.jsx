@@ -4,12 +4,14 @@ import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import ProtectedRoute from "./utils/ProtectedRoute";
-import Chat from "./Components/Chat";
+import Chat from "./Components/ChatRoom/Chat";
+import Navbar from "./Components/Navbar";
 
 function App() {
   return (
     <div>
       <ChatContextProvider>
+        <Navbar />
         <Router>
           <Routes>
             <Route path="/" element={<Home />}>
