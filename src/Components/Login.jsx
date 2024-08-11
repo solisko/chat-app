@@ -74,7 +74,7 @@ const Login = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="input input-ghost w-full max-w-xs"
-              autoComplete="username"
+              // autoComplete="username"
               required
             />
             <label htmlFor="password" className="label">
