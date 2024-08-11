@@ -1,10 +1,20 @@
 import { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import defaultAvatar from "../assets/img/astronaut.png";
+
+const isValidUrl = (url) => {
+  try {
+    new URL(url);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
 
 export const ChatContext = createContext();
 
 const ChatProvider = (props) => {
-  
+
   const decodeToken = (token) => {
     try {
       const decoded = jwtDecode(token);
@@ -104,6 +114,9 @@ const ChatProvider = (props) => {
     setIsAuthenticated(false);
   };
 
+  const avatarSrc =
+    user?.avatar && isValidUrl(user.avatar) ? user.avatar : defaultAvatar;
+
   return (
     <ChatContext.Provider
       value={{
@@ -114,6 +127,7 @@ const ChatProvider = (props) => {
         login,
         logout,
         user,
+        avatarSrc,
       }}
     >
       {props.children}
