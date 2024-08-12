@@ -1,13 +1,13 @@
 import { useContext } from "react";
 import { ChatContext } from "../Context/ChatContextProvider";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
-const ProtectedRoute = ({ component: Component, ...rest }) => {
+const ProtectedRoute = () => {
   const { isAuthenticated } = useContext(ChatContext);
 
   if (!isAuthenticated) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" replace state={{ protectedRoute: true }} />;
   }
-  return <Component {...rest} />;
+  return <Outlet />;
 };
 export default ProtectedRoute;

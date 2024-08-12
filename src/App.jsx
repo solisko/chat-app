@@ -18,7 +18,9 @@ function App() {
               <Route index element={<Login />} />
               <Route path="register" element={<Register />} />
             </Route>
-            <Route path="/chat" element={<ProtectedRoute component={Chat} />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/chat" element={<Chat />} />
+            </Route>
           </Routes>
         </Router>
       </ChatContextProvider>
