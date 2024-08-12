@@ -43,6 +43,7 @@ const ChatProvider = (props) => {
     }
     return null;
   });
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     setIsAuthenticated(!!jwtToken);
@@ -66,31 +67,55 @@ const ChatProvider = (props) => {
     }
   };
 
-  // const fetchUser = async (token, username) => {
+  // const fetchMessages = async () => {
   //   try {
-  //     const response = await fetch("https://chatify-api.up.railway.app/users", {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
+  //     const response = await fetch(
+  //       `https://chatify-api.up.railway.app/messages?userId=${user.userId}`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${jwtToken}`,
+  //         },
+  //       }
+  //     );
 
   //     if (!response.ok) {
-  //       throw new Error("Failed to fetch user info");
+  //       throw new Error("Failed to fetch messages");
   //     }
+
   //     const data = await response.json();
-  //     const user = data.find((user) => user.username === username);
-  //     if (user) {
-  //       setUser(user);
-  //       localStorage.setItem("user", JSON.stringify(user));
-  //     } else {
-  //       console.error("User not found for username:", username);
-  //     }
+  //     // console.log("Fetched messages:", data);
+  //     setMessages(data);
   //   } catch (error) {
-  //     console.error("Failed to fetch user info:", error);
+  //     console.error("Failed to fetch messages:", error.message);
   //   }
   // };
+
+  const fetchMessages = async () => {
+    try {
+      const response = await fetch(
+        `https://chatify-api.up.railway.app/messages?conversationId=3fa85f64-5717-4562-b3fc-2c963f66afa6`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch messages");
+      }
+
+      const data = await response.json();
+      // console.log("Fetched messages:", data);
+      setMessages(data);
+    } catch (error) {
+      console.error("Failed to fetch messages:", error.message);
+    }
+  };
 
   const login = async (token) => {
     setJwtToken(token);
@@ -128,6 +153,8 @@ const ChatProvider = (props) => {
         logout,
         user,
         avatarSrc,
+        fetchMessages,
+        messages,
       }}
     >
       {props.children}
