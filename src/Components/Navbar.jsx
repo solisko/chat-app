@@ -5,8 +5,8 @@ const Navbar = () => {
   const { user, avatarSrc, isAuthenticated } = useContext(ChatContext);
 
   return (
-    <div>
-      <div className="navbar bg-base-300 fixed top-0 left-0 w-full z-40">
+    <div className="fixed top-0 left-0 w-full z-50 bg-base-300 shadow-md">
+      <div className="navbar container mx-auto h-20">
         <button className="btn btn-ghost text-xl">shut-up</button>
         {isAuthenticated && (
           <div className="ml-auto flex items-center space-x-4">
@@ -21,9 +21,8 @@ const Navbar = () => {
           </div>
         )}
       </div>
-      {/* Spacer to prevent content overlap */}
-      <div className="h-10"></div>
     </div>
   );
 };
+
 export default Navbar;

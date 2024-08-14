@@ -3,6 +3,8 @@ import { ChatContext } from "../../Context/ChatContextProvider";
 import ShowMessages from "./ShowMessages";
 import SendMessages from "./SendMessages";
 import SideNav from "../SideNav";
+import Conversations from "./Conversations";
+import Navbar from "../Navbar";
 
 const Chat = () => {
   const { jwtToken, fetchMessages } = useContext(ChatContext);
@@ -15,9 +17,14 @@ const Chat = () => {
 
   return (
     <div>
-      <SideNav />
+      <div className="nav">
+
+      <Navbar/>
+      </div>
+      <Conversations/>
       <ShowMessages />
       <SendMessages />
+      <SideNav />
     </div>
   );
 };
