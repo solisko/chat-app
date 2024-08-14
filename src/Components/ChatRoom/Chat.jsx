@@ -16,15 +16,19 @@ const Chat = () => {
   }, [jwtToken]);
 
   return (
-    <div>
-      <div className="nav">
-
-      <Navbar/>
+    <div className="flex flex-col h-screen">
+      <Navbar />
+      <div className="flex h-full flex-1">
+        <Conversations />
+        <div className="w-2/3 ml-auto flex flex-col">
+          <div className="flex-1">
+            <ShowMessages />
+          </div>
+          <div className="flex items-center">
+            <SendMessages />
+          </div>
+        </div>
       </div>
-      <Conversations/>
-      <ShowMessages />
-      <SendMessages />
-      <SideNav />
     </div>
   );
 };

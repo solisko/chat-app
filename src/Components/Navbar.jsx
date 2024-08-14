@@ -5,7 +5,8 @@ const Navbar = () => {
   const { user, avatarSrc, isAuthenticated } = useContext(ChatContext);
 
   return (
-    <div className="fixed top-0 left-0 w-full z-50 bg-base-300 shadow-md">
+    <div className="sticky top-0 w-full z-50 bg-base-300 shadow-md">
+      {/* sticky top-0 z-50 bg-gray-800 text-white p-4 */}
       <div className="navbar container mx-auto h-20">
         <button className="btn btn-ghost text-xl">shut-up</button>
         {isAuthenticated && (

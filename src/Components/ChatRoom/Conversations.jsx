@@ -1,6 +1,6 @@
 const Conversations = () => {
   return (
-      <div className="overflow-x-auto">
+      <div className="fixed h-screen w-1/3 border-r border-gray-300 flex flex-col overflow-y-auto">
         <table className="table">
           {/* head */}
           <thead>

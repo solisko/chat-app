@@ -44,13 +44,15 @@ const SendMessages = () => {
   };
 
   return (
-    <div className="bg-primary fixed bottom-0 w-full py-10 shadow.lg">
+    <div className="bg-primary fixed bottom-0 w-full py-4 shadow.lg">
+      <div className="container mx-auto max-w-xl">
+
       <form
-        className="container mx-auto max-w-xl flex px-2"
+        className="flex items-center px-4"
         onSubmit={handleSendMessage}
       >
         <input
-          className="input w-full rounded-r-none focus:outline-none"
+          className="input rounded-r-none focus:outline-none"
           type="text"
           placeholder="Type here..."
           value={newMsg}
@@ -60,6 +62,7 @@ const SendMessages = () => {
           Send
         </button>
       </form>
+      </div>
     </div>
   );
 };
