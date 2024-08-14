@@ -17,7 +17,7 @@ const SendMessages = () => {
           },
           body: JSON.stringify({
             text: newMsg,
-            conversationId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            conversationId: "e98dfca3-b5f4-4113-aaa7-e304cbbe1ce2",
           }),
         }
       );
@@ -26,7 +26,7 @@ const SendMessages = () => {
         throw new Error("Failed to send message");
       }
       const data = await response.json();
-      console.log("Message sent:", data);
+      // console.log("Message sent:", data);
       setNewMsg("");
       fetchMessages();
     } catch (error) {

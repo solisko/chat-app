@@ -6,13 +6,14 @@ import Register from "./Components/Register";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import Chat from "./Components/ChatRoom/Chat";
 import Navbar from "./Components/Navbar";
+import Footer from "./Components/Footer";
 
 function App() {
   return (
     <div>
       <ChatContextProvider>
-        <Navbar />
         <Router>
+          <Navbar />
           <Routes>
             <Route path="/" element={<Home />}>
               <Route index element={<Login />} />

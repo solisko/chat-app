@@ -11,6 +11,9 @@ const isValidUrl = (url) => {
   }
 };
 
+let uuid = self.crypto.randomUUID();
+console.log(uuid); 
+
 export const ChatContext = createContext();
 
 const ChatProvider = (props) => {
@@ -24,6 +27,7 @@ const ChatProvider = (props) => {
         userId: decoded.id,
         username: decoded.user,
         avatar: decoded.avatar,
+        invite: decoded.invite
       };
     } catch (error) {
       console.error("Failed to decode token:", error);
@@ -95,7 +99,7 @@ const ChatProvider = (props) => {
   const fetchMessages = async () => {
     try {
       const response = await fetch(
-        `https://chatify-api.up.railway.app/messages?conversationId=3fa85f64-5717-4562-b3fc-2c963f66afa6`,
+        `https://chatify-api.up.railway.app/messages?conversationId=e98dfca3-b5f4-4113-aaa7-e304cbbe1ce2`,
         {
           method: "GET",
           headers: {
