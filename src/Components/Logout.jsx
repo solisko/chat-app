@@ -12,7 +12,7 @@ const Logout = () => {
   };
   return (
     <button
-      className="btn transition duration-200 ease-in-out hover:bg-primary"
+      className="btn btn-outline btn-primary"
       onClick={handleLogout}
     >
       Logout

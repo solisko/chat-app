@@ -85,7 +85,7 @@ const Register = () => {
       alert(
         "Registered successfully! You are being redirected to the login page."
       );
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       setError(error.message);
       console.error("There was an error creating the account:", error.message);

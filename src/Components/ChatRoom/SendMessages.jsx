@@ -17,7 +17,7 @@ const SendMessages = () => {
           },
           body: JSON.stringify({
             text: newMsg,
-            conversationId: "e98dfca3-b5f4-4113-aaa7-e304cbbe1ce2",
+            conversationId: "2deeb52a-8b97-47a1-9c14-e4ec1e167ef9",
           }),
         }
       );
@@ -44,15 +44,13 @@ const SendMessages = () => {
   };
 
   return (
-    <div className="bg-primary fixed bottom-0 w-full py-4 shadow.lg">
-      <div className="container mx-auto max-w-xl">
-
+    <div className="fixed bottom-0 left-1/3 w-2/3 bg-primary py-4 px-6">
       <form
-        className="flex items-center px-4"
+        className="flex justify-center items-center w-full max-w-xl mx-auto"
         onSubmit={handleSendMessage}
       >
         <input
-          className="input rounded-r-none focus:outline-none"
+          className="input flex-grow rounded-r-none focus:outline-none"
           type="text"
           placeholder="Type here..."
           value={newMsg}
@@ -62,7 +60,6 @@ const SendMessages = () => {
           Send
         </button>
       </form>
-      </div>
     </div>
   );
 };

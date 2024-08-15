@@ -1,6 +1,6 @@
 const Conversations = () => {
   return (
-      <div className="fixed h-screen w-1/3 border-r border-gray-300 flex flex-col overflow-y-auto">
+      <div className="fixed h-screen w-1/3 border-r border-base-200 flex flex-col overflow-y-auto">
         <table className="table">
           {/* head */}
           <thead>
@@ -10,7 +10,7 @@ const Conversations = () => {
           </thead>
           <tbody>
             {/* row 1 */}
-            <tr>
+            <tr className="bg-neutral-content">
               <td>
                 <div className="flex items-center gap-6">
                   <div className="avatar">

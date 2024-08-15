@@ -5,3 +5,22 @@
 * {
   box-sizing: border-box;
 }
+
+.small-text {
+  font-size: 0.6rem; /* Anpassa storleken efter behov */
+}
+
+.hide-scroll {
+  overflow-y: scroll; /* Add the ability to scroll */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scroll {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

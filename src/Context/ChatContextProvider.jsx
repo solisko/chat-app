@@ -12,12 +12,11 @@ const isValidUrl = (url) => {
 };
 
 let uuid = self.crypto.randomUUID();
-console.log(uuid); 
+console.log(uuid);
 
 export const ChatContext = createContext();
 
 const ChatProvider = (props) => {
-
   const decodeToken = (token) => {
     try {
       const decoded = jwtDecode(token);
@@ -27,7 +26,7 @@ const ChatProvider = (props) => {
         userId: decoded.id,
         username: decoded.user,
         avatar: decoded.avatar,
-        invite: decoded.invite
+        invite: decoded.invite,
       };
     } catch (error) {
       console.error("Failed to decode token:", error);
@@ -48,6 +47,7 @@ const ChatProvider = (props) => {
     return null;
   });
   const [messages, setMessages] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
 
   useEffect(() => {
     setIsAuthenticated(!!jwtToken);
@@ -99,7 +99,7 @@ const ChatProvider = (props) => {
   const fetchMessages = async () => {
     try {
       const response = await fetch(
-        `https://chatify-api.up.railway.app/messages?conversationId=e98dfca3-b5f4-4113-aaa7-e304cbbe1ce2`,
+        `https://chatify-api.up.railway.app/messages?conversationId=2deeb52a-8b97-47a1-9c14-e4ec1e167ef9`,
         {
           method: "GET",
           headers: {
@@ -118,6 +118,51 @@ const ChatProvider = (props) => {
       setMessages(data);
     } catch (error) {
       console.error("Failed to fetch messages:", error.message);
+    }
+  };
+
+  const fetchAllUsers = async () => {
+    try {
+      const response = await fetch("https://chatify-api.up.railway.app/users", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch users");
+      }
+      const data = await response.json();
+      setAllUsers(data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+  const inviteUserToChat = async () => {
+    try {
+      const response = await fetch(
+        `https://chatify-api.up.railway.app/invite/384`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${jwtToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            conversationId: "2deeb52a-8b97-47a1-9c14-e4ec1e167ef9",
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to send invite");
+      }
+      const data = await response.json();
+      console.log("Invite sent successfully:", data);
+    } catch (error) {
+      console.error("Error inviting user:", error);
     }
   };
 
@@ -159,6 +204,9 @@ const ChatProvider = (props) => {
         avatarSrc,
         fetchMessages,
         messages,
+        inviteUserToChat,
+        fetchAllUsers,
+        allUsers,
       }}
     >
       {props.children}
