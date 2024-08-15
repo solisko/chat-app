@@ -18,7 +18,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       const response = await fetch(
         "https://chatify-api.up.railway.app/auth/token",
@@ -35,35 +35,32 @@ const Login = () => {
         }
       );
       if (!response.ok) {
-        if (response.status === 401) {
-          toast.error("Invalid credentials. Please try again.", {
+        const errorData = await response.json();
+        toast.error(
+          errorData.error ||
+            "Login failed. Please check your credentials and try again.",
+          {
             className: "custom-toast",
-          });
-        } else {
-          const errorMsg = await response.json();
-          toast.error(
-            errorMsg.message || "Failed to login. Please try again.",
-            {
-              className: "custom-toast",
-            }
-          );
-        }
+            ariaLive: "assertive",
+          }
+        );
         return;
       }
       const data = await response.json();
-      // console.log("Received token:", data.token);
       await login(data.token);
-      toast.success("Login successfully! Get ready to chat!", {
+      toast.success("Login successful! Redirecting to chat...", {
         className: "custom-toast",
       });
       setTimeout(() => {
         navigate("/chat");
       }, 1000);
     } catch (error) {
-      console.error(
-        "There was an error logging in to the account:",
-        error.message
-      );
+      toast.error("An unexpected error occurred. Please try again later.", {
+        className: "custom-toast",
+      });
+      console.error("There was an error logging in:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -86,7 +83,7 @@ const Login = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="input input-ghost w-full max-w-xs"
-              // autoComplete="username"
+              autoComplete="username"
               required
             />
             <label htmlFor="password" className="label">
@@ -99,11 +96,16 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="input input-ghost w-full max-w-xs"
+              autoComplete="current-password"
               required
             />
             <div className="form-control mt-9">
-              <button className="btn btn-primary" type="submit">
-                Login
+              <button
+                className="btn btn-primary"
+                type="submit"
+                disabled={loading}
+              >
+                {loading ? "Logging in..." : "Login"}
               </button>
             </div>
             <Link to="/register" className="btn btn-link">
