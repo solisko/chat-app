@@ -40,8 +40,7 @@ const Login = () => {
           errorData.error ||
             "Login failed. Please check your credentials and try again.",
           {
-            className: "custom-toast",
-            ariaLive: "assertive",
+            className: "custom-toast"
           }
         );
         return;
@@ -83,7 +82,7 @@ const Login = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="input input-ghost w-full max-w-xs"
-              autoComplete="username"
+              autoComplete="off"
               required
             />
             <label htmlFor="password" className="label">

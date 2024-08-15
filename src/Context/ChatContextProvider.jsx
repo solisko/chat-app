@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import defaultAvatar from "../assets/img/astronaut.png";
+import { toast } from "react-toastify";
 
 const isValidUrl = (url) => {
   try {
@@ -12,7 +13,7 @@ const isValidUrl = (url) => {
 };
 
 let uuid = self.crypto.randomUUID();
-console.log(uuid);
+// console.log(uuid);
 
 export const ChatContext = createContext();
 
@@ -62,7 +63,7 @@ const ChatProvider = (props) => {
 
   const startLogoutTimer = () => {
     clearTimeout(logoutTimer);
-    const logoutTime = 30 * 60 * 1000; // 3 minuter
+    const logoutTime = 30 * 60 * 1000;
     const newLogoutTimer = setTimeout(() => {
       handleLogout();
     }, logoutTime);
@@ -70,8 +71,12 @@ const ChatProvider = (props) => {
   };
 
   const handleLogout = () => {
-    logout();
-    alert("Du har blivit utloggad på grund av inaktivitet.");
+    toast("You gone? Seems like it. Logging out.", {
+      className: "custom-toast",
+    });
+    setTimeout(() => {
+      logout();
+    }, 1000);
   };
 
   const fetchCsrfToken = async () => {

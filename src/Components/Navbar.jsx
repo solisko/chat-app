@@ -1,8 +1,18 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ChatContext } from "../Context/ChatContextProvider";
+import SideNav from "./SideNav";
 
 const Navbar = () => {
-  const { user, avatarSrc, isAuthenticated } = useContext(ChatContext);
+  const { user, avatarSrc } = useContext(ChatContext);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const handleAvatarClick = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleCloseSidebar = () => {
+    setIsSidebarOpen(false);
+  };
 
   return (
     <div className="fixed top-0 w-full z-50 bg-base-300 shadow-md">
@@ -12,19 +22,21 @@ const Navbar = () => {
           <div className="form-control">
             <input
               type="text"
+              id="search"
               placeholder="Search"
               className="input input-bordered w-48 md:w-auto"
             />
           </div>
-          <label htmlFor="my-drawer-4" className="cursor-pointer">
+          <div onClick={handleAvatarClick} className="cursor-pointer">
             <img
               src={avatarSrc}
               alt={`${user.username}'s avatar`}
               className="w-16 h-16 rounded-full object-cover"
             />
-          </label>
+          </div>
         </div>
       </div>
+      <SideNav isOpen={isSidebarOpen} onClose={handleCloseSidebar} />
     </div>
   );
 };

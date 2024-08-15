@@ -51,6 +51,7 @@ const SendMessages = () => {
       >
         <input
           className="input flex-grow rounded-r-none focus:outline-none"
+          id="send"
           type="text"
           placeholder="Type here..."
           value={newMsg}

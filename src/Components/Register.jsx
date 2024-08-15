@@ -117,7 +117,7 @@ const Register = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="input input-ghost w-full max-w-xs"
-              autoComplete="username"
+              autoComplete="off"
               required
             />
             <label htmlFor="email" className="label">

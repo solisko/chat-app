@@ -18,6 +18,7 @@ const Chat = () => {
   return (
     <div className="flex flex-col h-screen hide-scroll">
       <Navbar />
+      {/* <SideNav /> */}
       <div className="flex h-full flex-1 pt-20">
         <Conversations />
         <div className=" w-2/3 ml-auto flex flex-col">
@@ -29,7 +30,6 @@ const Chat = () => {
           </div>
         </div>
       </div>
-      <SideNav />
     </div>
   );
 };
