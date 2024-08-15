@@ -6,6 +6,7 @@ import Register from "./Components/Register";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import Chat from "./Components/ChatRoom/Chat";
 import Navbar from "./Components/Navbar";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -17,10 +18,11 @@ function App() {
               <Route index element={<Login />} />
               <Route path="register" element={<Register />} />
             </Route>
-              <Route element={<ProtectedRoute />}>
-                <Route path="/chat" element={<Chat />} />
-              </Route>
+            <Route element={<ProtectedRoute />}>
+              <Route path="/chat" element={<Chat />} />
+            </Route>
           </Routes>
+          <ToastContainer position="top-right" pauseOnFocusLoss={false} />
         </Router>
       </ChatContextProvider>
     </div>

@@ -34,11 +34,9 @@ const ChatProvider = (props) => {
     }
   };
 
-  const [csrfToken, setCsrfToken] = useState("");
   const [jwtToken, setJwtToken] = useState(
     () => localStorage.getItem("jwtToken") || ""
   );
-  const [isAuthenticated, setIsAuthenticated] = useState(!!jwtToken);
   const [user, setUser] = useState(() => {
     const savedToken = localStorage.getItem("jwtToken");
     if (savedToken) {
@@ -46,12 +44,35 @@ const ChatProvider = (props) => {
     }
     return null;
   });
+  const [csrfToken, setCsrfToken] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(!!jwtToken);
   const [messages, setMessages] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
+  const [logoutTimer, setLogoutTimer] = useState(null);
 
   useEffect(() => {
     setIsAuthenticated(!!jwtToken);
+    if (jwtToken) {
+      startLogoutTimer();
+    }
+    return () => {
+      clearTimeout(logoutTimer);
+    };
   }, [jwtToken]);
+
+  const startLogoutTimer = () => {
+    clearTimeout(logoutTimer);
+    const logoutTime = 30 * 60 * 1000; // 3 minuter
+    const newLogoutTimer = setTimeout(() => {
+      handleLogout();
+    }, logoutTime);
+    setLogoutTimer(newLogoutTimer);
+  };
+
+  const handleLogout = () => {
+    logout();
+    alert("Du har blivit utloggad på grund av inaktivitet.");
+  };
 
   const fetchCsrfToken = async () => {
     try {
@@ -175,6 +196,7 @@ const ChatProvider = (props) => {
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
       setIsAuthenticated(true);
+      startLogoutTimer(); // Starta logout-timern vid inloggning
     } else {
       console.error("Failed to decode user data from token");
     }
@@ -186,6 +208,7 @@ const ChatProvider = (props) => {
     setUser(null);
     localStorage.removeItem("user");
     setIsAuthenticated(false);
+    clearTimeout(logoutTimer);
   };
 
   const avatarSrc =

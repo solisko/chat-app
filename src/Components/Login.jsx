@@ -1,12 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { ChatContext } from "../Context/ChatContextProvider";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const { csrfToken, fetchCsrfToken, login } = useContext(ChatContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,8 +17,8 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
-
+    setLoading(true);
+    
     try {
       const response = await fetch(
         "https://chatify-api.up.railway.app/auth/token",
@@ -34,20 +36,30 @@ const Login = () => {
       );
       if (!response.ok) {
         if (response.status === 401) {
-          setError("Invalid credentials");
+          toast.error("Invalid credentials. Please try again.", {
+            className: "custom-toast",
+          });
         } else {
           const errorMsg = await response.json();
-          setError(errorMsg.message || "Failed to login");
+          toast.error(
+            errorMsg.message || "Failed to login. Please try again.",
+            {
+              className: "custom-toast",
+            }
+          );
         }
         return;
       }
       const data = await response.json();
       // console.log("Received token:", data.token);
       await login(data.token);
-      alert("Login successfully! You are being redirected to the chat page.");
-      navigate("/chat");
+      toast.success("Login successfully! Get ready to chat!", {
+        className: "custom-toast",
+      });
+      setTimeout(() => {
+        navigate("/chat");
+      }, 1000);
     } catch (error) {
-      setError(error.message);
       console.error(
         "There was an error logging in to the account:",
         error.message
@@ -90,10 +102,7 @@ const Login = () => {
               required
             />
             <div className="form-control mt-9">
-              <button
-                className="btn btn-primary transition duration-200 ease-in-out hover:bg-primary"
-                type="submit"
-              >
+              <button className="btn btn-primary" type="submit">
                 Login
               </button>
             </div>
@@ -103,7 +112,6 @@ const Login = () => {
           </div>
         </form>
       </div>
-      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };

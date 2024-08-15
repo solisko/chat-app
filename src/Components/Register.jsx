@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ChatContext } from "../Context/ChatContextProvider";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
   const { csrfToken, fetchCsrfToken } = useContext(ChatContext);
@@ -9,7 +11,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState("");
   const [avatarFile, setAvatarFile] = useState(null);
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,14 +41,16 @@ const Register = () => {
       }
       return data.data.url;
     } catch (error) {
-      console.error("Error uploading avatar:", error);
+      toast.error("Error uploading avatar: " + error.message, {
+        className: "custom-toast",
+      });
       throw error;
     }
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setError("");
+    setLoading(true);
 
     try {
       let avatarUrl = avatar;
@@ -71,24 +75,26 @@ const Register = () => {
           }),
         }
       );
-      let errorMsg;
       if (!response.ok) {
-        try {
-          const errorData = await response.json();
-          errorMsg = errorData.message;
-        } catch (jsonError) {
-          errorMsg = await response.text();
-        }
-
-        throw new Error(errorMsg || "Failed to create user");
+        const errorData = await response.json();
+        toast.error(
+          errorData.error || "Failed to create user. Please try again.",
+          {
+            className: "custom-toast",
+          }
+        );
+        throw new Error(
+          errorData.error || "Failed to create user. Please try again."
+        );
       }
-      alert(
-        "Registered successfully! You are being redirected to the login page."
-      );
+      toast.success("Registered successfully! Login time.", {
+        className: "custom-toast",
+      });
       navigate("/");
     } catch (error) {
-      setError(error.message);
       console.error("There was an error creating the account:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -148,13 +154,15 @@ const Register = () => {
               onChange={(e) => setPassword(e.target.value)}
               className="input input-ghost w-full max-w-xs"
               required
+              minLength={6}
             />
             <div className="form-control mt-9">
               <button
-                className="btn btn-primary transition duration-200 ease-in-out hover:bg-primary"
+                className="btn btn-primary"
                 type="submit"
+                disabled={loading}
               >
-                Register
+                {loading ? "Registrating..." : "Create account"}
               </button>
             </div>
             <Link to="/" className="btn btn-link">
@@ -163,7 +171,6 @@ const Register = () => {
           </div>
         </form>
       </div>
-      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };
