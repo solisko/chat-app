@@ -47,7 +47,7 @@ const Login = () => {
       }
       const data = await response.json();
       await login(data.token);
-      toast.success("Login successful! Redirecting to chat...", {
+      toast.success("👋 Hey you. Welcome to the chat...", {
         className: "custom-toast",
       });
       setTimeout(() => {

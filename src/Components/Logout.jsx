@@ -8,7 +8,7 @@ const Logout = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    toast("Logging out. Catch you later!", {
+    toast("👋 Logging out. Catch you later!", {
       className: "custom-toast",
     });
     setTimeout(() => {

@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ChatContextProvider from "./Context/ChatContextProvider";
+import { ToastContainer } from "react-toastify";
+import ProtectedRoute from "./utils/ProtectedRoute";
 import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
-import ProtectedRoute from "./utils/ProtectedRoute";
 import Chat from "./Components/ChatRoom/Chat";
-import Navbar from "./Components/Navbar";
-import { ToastContainer } from "react-toastify";
+import Profile from "./Components/Profile";
 
 function App() {
   return (
@@ -20,9 +20,14 @@ function App() {
             </Route>
             <Route element={<ProtectedRoute />}>
               <Route path="/chat" element={<Chat />} />
+              <Route path="/profile" element={<Profile />} />
             </Route>
           </Routes>
-          <ToastContainer position="top-right" pauseOnFocusLoss={false} />
+          <ToastContainer
+            position="top-right"
+            pauseOnFocusLoss={false}
+            newestOnTop
+          />
         </Router>
       </ChatContextProvider>
     </div>

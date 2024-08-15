@@ -2,7 +2,6 @@ import { useContext, useEffect } from "react";
 import { ChatContext } from "../../Context/ChatContextProvider";
 import ShowMessages from "./ShowMessages";
 import SendMessages from "./SendMessages";
-import SideNav from "../SideNav";
 import Conversations from "./Conversations";
 import Navbar from "../Navbar";
 
@@ -18,7 +17,6 @@ const Chat = () => {
   return (
     <div className="flex flex-col h-screen hide-scroll">
       <Navbar />
-      {/* <SideNav /> */}
       <div className="flex h-full flex-1 pt-20">
         <Conversations />
         <div className=" w-2/3 ml-auto flex flex-col">

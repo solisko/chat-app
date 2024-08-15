@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { ChatContext } from "../../Context/ChatContextProvider";
+import { PaperAirplaneIcon } from "@heroicons/react/24/outline"; 
 
 const SendMessages = () => {
   const { jwtToken, fetchMessages } = useContext(ChatContext);
@@ -58,7 +59,7 @@ const SendMessages = () => {
           onChange={(e) => setNewMsg(e.target.value)}
         />
         <button type="submit" className="btn w-auto rounded-l-none">
-          Send
+          <PaperAirplaneIcon className="h-5 h-5"/>
         </button>
       </form>
     </div>
