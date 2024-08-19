@@ -27,6 +27,7 @@ function App() {
             position="top-right"
             pauseOnFocusLoss={false}
             newestOnTop
+            // offset="x: 50, y: 10"
           />
         </Router>
       </ChatContextProvider>

@@ -1,16 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import defaultAvatar from "../assets/img/astronaut.png";
 import { toast } from "react-toastify";
-
-const isValidUrl = (url) => {
-  try {
-    new URL(url);
-    return true;
-  } catch (e) {
-    return false;
-  }
-};
 
 let uuid = self.crypto.randomUUID();
 console.log(uuid);
@@ -50,6 +40,7 @@ const ChatProvider = (props) => {
   const [isAuthenticated, setIsAuthenticated] = useState(!!jwtToken);
   const [messages, setMessages] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
+  const [userMap, setUserMap] = useState({});
   const [logoutTimer, setLogoutTimer] = useState(null);
   const [selectedConversation, setSelectedConversation] = useState(null);
 
@@ -65,7 +56,7 @@ const ChatProvider = (props) => {
 
   const startLogoutTimer = () => {
     clearTimeout(logoutTimer);
-    const logoutTime = 30 * 60 * 1000;
+    const logoutTime = 30 * 60 * 1000; // 30 min
     const newLogoutTimer = setTimeout(() => {
       handleLogout();
     }, logoutTime);
@@ -73,12 +64,10 @@ const ChatProvider = (props) => {
   };
 
   const handleLogout = () => {
-    toast("You gone? Seems like it. Logging out.", {
+    toast("You gone? Seems like it. Logging you out.", {
       className: "custom-toast",
     });
-    setTimeout(() => {
-      logout();
-    }, 1000);
+    logout();
   };
 
   const fetchCsrfToken = async () => {
@@ -163,16 +152,17 @@ const ChatProvider = (props) => {
       }
       const data = await response.json();
       setAllUsers(data);
+
+      const map = {};
+      data.forEach((user) => {
+        map[user.userId] = user;
+        map[user.username] = user;
+      });
+      setUserMap(map);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchAllUsers();
-    }
-  }, [isAuthenticated]);
 
   // const inviteUserToChat = async () => {
   //   try {
@@ -224,9 +214,6 @@ const ChatProvider = (props) => {
     clearTimeout(logoutTimer);
   };
 
-  const avatarSrc =
-    user?.avatar && isValidUrl(user.avatar) ? user.avatar : defaultAvatar;
-
   return (
     <ChatContext.Provider
       value={{
@@ -237,7 +224,6 @@ const ChatProvider = (props) => {
         login,
         logout,
         user,
-        avatarSrc,
         fetchMessagesWithUserId,
         fetchMessagesWithConversationId,
         messages,
@@ -245,6 +231,7 @@ const ChatProvider = (props) => {
         allUsers,
         selectedConversation,
         setSelectedConversation,
+        userMap,
       }}
     >
       {props.children}

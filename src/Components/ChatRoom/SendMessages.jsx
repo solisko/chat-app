@@ -28,6 +28,7 @@ const SendMessages = () => {
         throw new Error("Failed to send message");
       }
       const data = await response.json();
+      console.log(data.latestMessage.text)
       setNewMsg("");
       if (selectedConversation) {
         fetchMessagesWithConversationId(selectedConversation);

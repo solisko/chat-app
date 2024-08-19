@@ -7,7 +7,7 @@ const SideNav = ({ isOpen, onClose }) => {
 
   return (
     <div
-      className={`fixed top-20 right-0 w-64 h-full bg-neutral-content transform ${
+      className={`fixed top-24 right-0 w-64 h-full bg-neutral-content transform ${
         isOpen ? "translate-x-0" : "translate-x-full"
       } transition-transform duration-300 ease-in-out shadow-lg z-50`}
     >

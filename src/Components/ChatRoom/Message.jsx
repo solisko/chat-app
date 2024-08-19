@@ -1,18 +1,20 @@
 import { useContext, useEffect, useState } from "react";
 import { ChatContext } from "../../Context/ChatContextProvider";
 import { TrashIcon } from "@heroicons/react/16/solid";
+import Avatar from "../Avatar";
 
 const Message = ({ message }) => {
   const {
-    avatarSrc,
     user,
     jwtToken,
     fetchMessagesWithUserId,
     fetchMessagesWithConversationId,
     selectedConversation,
+    userMap,
   } = useContext(ChatContext);
 
   const isCurrentUser = message.userId === user.userId;
+  const messageUser = userMap[message.userId];
 
   const deleteMessage = async (messageId) => {
     try {
@@ -46,7 +48,10 @@ const Message = ({ message }) => {
         <div className="chat chat-end">
           <div className="chat-image avatar">
             <div className="w-11 rounded-full">
-              <img src={avatarSrc} alt={user.username} />
+              <Avatar
+                avatarUrl={user.avatar}
+                altText={`${user.username}'s avatar`}
+              />
             </div>
           </div>
           <div className="chat-header">
@@ -75,7 +80,7 @@ const Message = ({ message }) => {
         <div className="chat chat-start">
           <div className="chat-image avatar">
             <div className="w-11 rounded-full">
-              <img src="" alt={`User ${message.userId}`} />
+              <Avatar avatarUrl={messageUser?.avatar} altText={messageUser?.username}/>
             </div>
           </div>
           <div className="chat-header">

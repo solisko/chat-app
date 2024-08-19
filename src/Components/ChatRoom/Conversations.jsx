@@ -1,8 +1,10 @@
 import { useContext } from "react";
 import { ChatContext } from "../../Context/ChatContextProvider";
+import Avatar from "../Avatar";
 
 const Conversations = () => {
-  const { user, allUsers, setSelectedConversation } = useContext(ChatContext);
+  const { user, setSelectedConversation, userMap } =
+    useContext(ChatContext);
 
   let invites = [];
 
@@ -23,35 +25,30 @@ const Conversations = () => {
       <table className="table">
         <thead>
           <tr>
-            <th>Conversations</th>
+            <th>Chats</th>
           </tr>
         </thead>
         <tbody>
           {invites.length === 0 ? (
             <tr className="bg-neutral-content">
-              <td className="text-center">You don't have any conversations</td>
+              <td className="text-center">You don't have any conversations!</td>
             </tr>
           ) : (
             invites.map((invite) => {
-              const matchingUser = allUsers.find(
-                (u) => u.username === invite.username
-              );
-
+              const matchingUser = userMap[invite.username];
               return (
-                <tr
-                  className="bg-neutral-content"
-                  key={invite.conversationId}
-                  onClick={() => handleSelectConversation(invite)}
-                >
+                <tr className="bg-neutral-content" key={invite.conversationId}>
                   <td>
-                    <div className="flex items-center gap-6">
+                    <div
+                      className="flex items-center gap-6 cursor-pointer"
+                      onClick={() => handleSelectConversation(invite)}
+                      role="button"
+                      tabIndex="0"
+                    >
                       <div className="avatar w-14 h-14 rounded-full overflow-hidden">
-                        <img
-                          src={
-                            matchingUser?.avatar || "path/to/default/avatar.png"
-                          }
-                          alt="Avatar"
-                          className="object-cover"
+                        <Avatar
+                          avatarUrl={matchingUser?.avatar}
+                          altText={`${invite.username}'s avatar`}
                         />
                       </div>
                       <div>
