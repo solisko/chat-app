@@ -7,28 +7,6 @@ const Message = ({ message }) => {
 
   const isCurrentUser = message.userId === user.userId;
 
-  //   const fetchUser = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         `https://chatify-api.up.railway.app/users/${invitedUserId}`,
-  //         {
-  //           method: "GET",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //             Authorization: `Bearer ${jwtToken}`,
-  //           },
-  //         }
-  //       );
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch user info");
-  //       }
-  //       const data = await response.json();
-
-  //     } catch (error) {
-  //       console.error("Failed to fetch user info:", error);
-  //     }
-  //   };
-
   const deleteMessage = async (messageId) => {
     try {
       const response = await fetch(

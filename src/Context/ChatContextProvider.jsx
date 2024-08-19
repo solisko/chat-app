@@ -26,6 +26,7 @@ const ChatProvider = (props) => {
       return {
         userId: decoded.id,
         username: decoded.user,
+        email: decoded.email,
         avatar: decoded.avatar,
         invite: decoded.invite,
       };
@@ -125,7 +126,7 @@ const ChatProvider = (props) => {
   const fetchMessages = async () => {
     try {
       const response = await fetch(
-        `https://chatify-api.up.railway.app/messages?conversationId=2deeb52a-8b97-47a1-9c14-e4ec1e167ef9`,
+        `https://chatify-api.up.railway.app/messages?conversationId=c1e2a700-e660-4cf4-be9b-a214d2d84bc2`,
         {
           method: "GET",
           headers: {
@@ -166,31 +167,37 @@ const ChatProvider = (props) => {
     }
   };
 
-  const inviteUserToChat = async () => {
-    try {
-      const response = await fetch(
-        `https://chatify-api.up.railway.app/invite/384`,
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${jwtToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            conversationId: "2deeb52a-8b97-47a1-9c14-e4ec1e167ef9",
-          }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to send invite");
-      }
-      const data = await response.json();
-      console.log("Invite sent successfully:", data);
-    } catch (error) {
-      console.error("Error inviting user:", error);
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchAllUsers();
     }
-  };
+  }, [isAuthenticated]);
+
+  // const inviteUserToChat = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       `https://chatify-api.up.railway.app/invite/384`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           Accept: "application/json",
+  //           Authorization: `Bearer ${jwtToken}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           conversationId: "2deeb52a-8b97-47a1-9c14-e4ec1e167ef9",
+  //         }),
+  //       }
+  //     );
+  //     if (!response.ok) {
+  //       throw new Error("Failed to send invite");
+  //     }
+  //     const data = await response.json();
+  //     console.log("Invite sent successfully:", data);
+  //   } catch (error) {
+  //     console.error("Error inviting user:", error);
+  //   }
+  // };
 
   const login = async (token) => {
     setJwtToken(token);
@@ -201,7 +208,7 @@ const ChatProvider = (props) => {
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
       setIsAuthenticated(true);
-      startLogoutTimer(); // Starta logout-timern vid inloggning
+      startLogoutTimer();
     } else {
       console.error("Failed to decode user data from token");
     }
@@ -232,7 +239,6 @@ const ChatProvider = (props) => {
         avatarSrc,
         fetchMessages,
         messages,
-        inviteUserToChat,
         fetchAllUsers,
         allUsers,
       }}
