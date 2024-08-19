@@ -3,7 +3,14 @@ import { ChatContext } from "../../Context/ChatContextProvider";
 import { TrashIcon } from "@heroicons/react/16/solid";
 
 const Message = ({ message }) => {
-  const { avatarSrc, user, jwtToken, fetchMessages } = useContext(ChatContext);
+  const {
+    avatarSrc,
+    user,
+    jwtToken,
+    fetchMessagesWithUserId,
+    fetchMessagesWithConversationId,
+    selectedConversation,
+  } = useContext(ChatContext);
 
   const isCurrentUser = message.userId === user.userId;
 
@@ -23,8 +30,11 @@ const Message = ({ message }) => {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-      // console.log("Message deleted:", data);
-      fetchMessages();
+      if (selectedConversation) {
+        fetchMessagesWithConversationId(selectedConversation);
+      } else {
+        fetchMessagesWithUserId(user.userId);
+      }
     } catch (error) {
       console.error("Error deleting message:", error);
     }

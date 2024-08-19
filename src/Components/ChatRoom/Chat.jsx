@@ -6,13 +6,22 @@ import Conversations from "./Conversations";
 import Navbar from "../Navbar";
 
 const Chat = () => {
-  const { jwtToken, fetchMessages } = useContext(ChatContext);
+  const {
+    jwtToken,
+    fetchMessagesWithUserId,
+    fetchMessagesWithConversationId,
+    selectedConversation,
+  } = useContext(ChatContext);
 
   useEffect(() => {
     if (jwtToken) {
-      fetchMessages();
+      if (selectedConversation) {
+        fetchMessagesWithConversationId(selectedConversation);
+      } else {
+        fetchMessagesWithUserId();
+      }
     }
-  }, [jwtToken]);
+  }, [jwtToken, selectedConversation]);
 
   return (
     <div className="flex flex-col h-screen hide-scroll">
@@ -21,7 +30,7 @@ const Chat = () => {
         <Conversations />
         <div className=" w-2/3 ml-auto flex flex-col">
           <div className="flex-1">
-            <ShowMessages />
+            <ShowMessages/>
           </div>
           <div className="flex items-center pb-20">
             <SendMessages />

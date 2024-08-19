@@ -1,12 +1,13 @@
 import { useContext, useState } from "react";
 import { ChatContext } from "../../Context/ChatContextProvider";
-import { PaperAirplaneIcon } from "@heroicons/react/24/outline"; 
+import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 
 const SendMessages = () => {
-  const { jwtToken, fetchMessages } = useContext(ChatContext);
+  const { jwtToken, fetchMessagesWithConversationId, selectedConversation } =
+    useContext(ChatContext);
   const [newMsg, setNewMsg] = useState("");
 
-  const sendMessage = async () => {
+  const sendMessage = async (conversationId) => {
     try {
       const response = await fetch(
         "https://chatify-api.up.railway.app/messages",
@@ -18,7 +19,7 @@ const SendMessages = () => {
           },
           body: JSON.stringify({
             text: newMsg,
-            conversationId: "c1e2a700-e660-4cf4-be9b-a214d2d84bc2",
+            conversationId: conversationId,
           }),
         }
       );
@@ -27,9 +28,10 @@ const SendMessages = () => {
         throw new Error("Failed to send message");
       }
       const data = await response.json();
-      // console.log("Message sent:", data);
       setNewMsg("");
-      fetchMessages();
+      if (selectedConversation) {
+        fetchMessagesWithConversationId(selectedConversation);
+      }
     } catch (error) {
       console.error("Failed to send message:", error.message);
     }
@@ -38,7 +40,11 @@ const SendMessages = () => {
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (newMsg.trim() !== "") {
-      sendMessage();
+      if (selectedConversation) {
+        sendMessage(selectedConversation);
+      } else {
+        alert("No conversation selected!");
+      }
     } else {
       alert("Enter valid message!");
     }
@@ -59,7 +65,7 @@ const SendMessages = () => {
           onChange={(e) => setNewMsg(e.target.value)}
         />
         <button type="submit" className="btn w-auto rounded-l-none">
-          <PaperAirplaneIcon className="h-5 h-5"/>
+          <PaperAirplaneIcon className="h-5 h-5" />
         </button>
       </form>
     </div>

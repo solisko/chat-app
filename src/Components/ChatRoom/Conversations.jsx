@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { ChatContext } from "../../Context/ChatContextProvider";
 
 const Conversations = () => {
-  const { user, allUsers } = useContext(ChatContext);
+  const { user, allUsers, setSelectedConversation } = useContext(ChatContext);
 
   let invites = [];
 
@@ -13,7 +13,11 @@ const Conversations = () => {
       console.error("Failed to parse invites:", error);
     }
   }
-  
+
+  const handleSelectConversation = (invite) => {
+    setSelectedConversation(invite.conversationId);
+  };
+
   return (
     <div className="fixed h-screen w-1/3 border-r border-base-200 flex flex-col overflow-y-auto">
       <table className="table">
@@ -34,16 +38,20 @@ const Conversations = () => {
               );
 
               return (
-                <tr className="bg-neutral-content" key={invite.conversationId}>
+                <tr
+                  className="bg-neutral-content"
+                  key={invite.conversationId}
+                  onClick={() => handleSelectConversation(invite)}
+                >
                   <td>
                     <div className="flex items-center gap-6">
-                      <div className="avatar w-14">
+                      <div className="avatar w-14 h-14 rounded-full overflow-hidden">
                         <img
                           src={
                             matchingUser?.avatar || "path/to/default/avatar.png"
                           }
                           alt="Avatar"
-                          className="rounded-full"
+                          className="object-cover"
                         />
                       </div>
                       <div>

@@ -13,7 +13,7 @@ const isValidUrl = (url) => {
 };
 
 let uuid = self.crypto.randomUUID();
-// console.log(uuid);
+console.log(uuid);
 
 export const ChatContext = createContext();
 
@@ -51,6 +51,7 @@ const ChatProvider = (props) => {
   const [messages, setMessages] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [logoutTimer, setLogoutTimer] = useState(null);
+  const [selectedConversation, setSelectedConversation] = useState(null);
 
   useEffect(() => {
     setIsAuthenticated(!!jwtToken);
@@ -98,35 +99,35 @@ const ChatProvider = (props) => {
     }
   };
 
-  // const fetchMessages = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       `https://chatify-api.up.railway.app/messages?userId=${user.userId}`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${jwtToken}`,
-  //         },
-  //       }
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to fetch messages");
-  //     }
-
-  //     const data = await response.json();
-  //     // console.log("Fetched messages:", data);
-  //     setMessages(data);
-  //   } catch (error) {
-  //     console.error("Failed to fetch messages:", error.message);
-  //   }
-  // };
-
-  const fetchMessages = async () => {
+  const fetchMessagesWithUserId = async () => {
     try {
       const response = await fetch(
-        `https://chatify-api.up.railway.app/messages?conversationId=c1e2a700-e660-4cf4-be9b-a214d2d84bc2`,
+        `https://chatify-api.up.railway.app/messages?userId=${user.userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch messages");
+      }
+
+      const data = await response.json();
+      // console.log("Fetched messages:", data);
+      setMessages(data);
+    } catch (error) {
+      console.error("Failed to fetch messages:", error.message);
+    }
+  };
+
+  const fetchMessagesWithConversationId = async (conversationId) => {
+    try {
+      const response = await fetch(
+        `https://chatify-api.up.railway.app/messages?conversationId=${conversationId}`,
         {
           method: "GET",
           headers: {
@@ -237,10 +238,13 @@ const ChatProvider = (props) => {
         logout,
         user,
         avatarSrc,
-        fetchMessages,
+        fetchMessagesWithUserId,
+        fetchMessagesWithConversationId,
         messages,
         fetchAllUsers,
         allUsers,
+        selectedConversation,
+        setSelectedConversation,
       }}
     >
       {props.children}
