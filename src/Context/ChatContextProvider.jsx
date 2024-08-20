@@ -3,7 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 
 let uuid = self.crypto.randomUUID();
-console.log(uuid);
+// console.log(uuid);
 
 export const ChatContext = createContext();
 
@@ -43,6 +43,11 @@ const ChatProvider = (props) => {
   const [userMap, setUserMap] = useState({});
   const [logoutTimer, setLogoutTimer] = useState(null);
   const [selectedConversation, setSelectedConversation] = useState(null);
+
+  const resetState = () => {
+    setSelectedConversation(null);
+    setMessages([]);
+  };
 
   useEffect(() => {
     setIsAuthenticated(!!jwtToken);
@@ -153,21 +158,29 @@ const ChatProvider = (props) => {
       const data = await response.json();
       setAllUsers(data);
 
-      const map = {};
+      const userMap = {};
       data.forEach((user) => {
-        map[user.userId] = user;
-        map[user.username] = user;
+        userMap[user.userId] = user;
+        userMap[user.username] = user;
       });
-      setUserMap(map);
+      setUserMap(userMap);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
 
+  const getUserById = (userId) => userMap[userId] || null;
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchAllUsers();
+    }
+  }, [isAuthenticated]);
+
   // const inviteUserToChat = async () => {
   //   try {
   //     const response = await fetch(
-  //       `https://chatify-api.up.railway.app/invite/384`,
+  //       `https://chatify-api.up.railway.app/invite/719`,
   //       {
   //         method: "POST",
   //         headers: {
@@ -176,7 +189,7 @@ const ChatProvider = (props) => {
   //           "Content-Type": "application/json",
   //         },
   //         body: JSON.stringify({
-  //           conversationId: "2deeb52a-8b97-47a1-9c14-e4ec1e167ef9",
+  //           conversationId: "ac2cacc8-60b9-4699-9a67-45164a009986",
   //         }),
   //       }
   //     );
@@ -199,6 +212,7 @@ const ChatProvider = (props) => {
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
       setIsAuthenticated(true);
+      resetState();
       startLogoutTimer();
     } else {
       console.error("Failed to decode user data from token");
@@ -206,12 +220,13 @@ const ChatProvider = (props) => {
   };
 
   const logout = () => {
+    clearTimeout(logoutTimer);
     setJwtToken("");
     localStorage.removeItem("jwtToken");
     setUser(null);
     localStorage.removeItem("user");
     setIsAuthenticated(false);
-    clearTimeout(logoutTimer);
+    resetState();
   };
 
   return (
@@ -231,7 +246,7 @@ const ChatProvider = (props) => {
         allUsers,
         selectedConversation,
         setSelectedConversation,
-        userMap,
+        getUserById,
       }}
     >
       {props.children}

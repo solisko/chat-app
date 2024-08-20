@@ -10,11 +10,11 @@ const Message = ({ message }) => {
     fetchMessagesWithUserId,
     fetchMessagesWithConversationId,
     selectedConversation,
-    userMap,
+    getUserById,
   } = useContext(ChatContext);
 
   const isCurrentUser = message.userId === user.userId;
-  const messageUser = userMap[message.userId];
+  const messageUser = getUserById(message.userId);
 
   const deleteMessage = async (messageId) => {
     try {
@@ -80,7 +80,7 @@ const Message = ({ message }) => {
         <div className="chat chat-start">
           <div className="chat-image avatar">
             <div className="w-11 rounded-full">
-              <Avatar avatarUrl={messageUser?.avatar} altText={messageUser?.username}/>
+              <Avatar avatarUrl={messageUser?.avatar} />
             </div>
           </div>
           <div className="chat-header">

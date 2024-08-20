@@ -3,8 +3,7 @@ import { ChatContext } from "../../Context/ChatContextProvider";
 import Avatar from "../Avatar";
 
 const Conversations = () => {
-  const { user, setSelectedConversation, userMap } =
-    useContext(ChatContext);
+  const { user, allUsers, setSelectedConversation } = useContext(ChatContext);
 
   let invites = [];
 
@@ -35,7 +34,10 @@ const Conversations = () => {
             </tr>
           ) : (
             invites.map((invite) => {
-              const matchingUser = userMap[invite.username];
+              const matchingUser = allUsers.find(
+                (u) => u.username === invite.username
+              );
+
               return (
                 <tr className="bg-neutral-content" key={invite.conversationId}>
                   <td>
