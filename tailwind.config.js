@@ -6,26 +6,17 @@ export default {
   },
   plugins: [require("daisyui")],
   daisyui: {
-    themes: ["retro", "dracula", "cupcake"],
+    themes: [
+      "retro",
+      {
+        mytheme: {
+          "primary": "#a37572",
+          "secondary": "#f6d860",
+          "accent": "#ef9995",
+          "neutral": "#bfb9ab",
+          "base-100": "#141414",
+        },
+      },
+    ],
   },
 };
-
-
-// module.exports = {
-//   //...
-//   daisyui: {
-//     themes: [
-//       {
-//         mytheme: {
-//           "primary": "#a991f7",
-//           "secondary": "#f6d860",
-//           "accent": "#37cdbe",
-//           "neutral": "#3d4451",
-//           "base-100": "#ffffff",
-//         },
-//       },
-//       "dark",
-//       "cupcake",
-//     ],
-//   },
-// }

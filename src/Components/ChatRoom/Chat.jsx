@@ -28,9 +28,9 @@ const Chat = () => {
       <Navbar />
       <div className="flex h-full flex-1 pt-24">
         <Conversations />
-        <div className=" w-2/3 ml-auto flex flex-col">
+        <div className="w-2/3 ml-auto flex flex-col">
           <div className="flex-1">
-            <ShowMessages/>
+            <ShowMessages />
           </div>
           <div className="flex items-center pb-24">
             <SendMessages />
@@ -41,4 +41,3 @@ const Chat = () => {
   );
 };
 export default Chat;
-

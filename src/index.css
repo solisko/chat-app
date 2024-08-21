@@ -28,7 +28,3 @@
   background-color: oklch(var(--n));
   color: oklch(var(--nc));
 }
-
-/* .btn:hover {
-  filter: brightness(85%) !important;
-} */
