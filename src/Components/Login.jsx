@@ -5,15 +5,11 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
-  const { csrfToken, fetchCsrfToken, login } = useContext(ChatContext);
+  const { csrfToken, login, BASE_URL } = useContext(ChatContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    fetchCsrfToken();
-  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,7 +17,7 @@ const Login = () => {
 
     try {
       const response = await fetch(
-        "https://chatify-api.up.railway.app/auth/token",
+        `${BASE_URL}/auth/token`,
         {
           method: "POST",
           headers: {
@@ -40,7 +36,7 @@ const Login = () => {
           errorData.error ||
             "Login failed. Please check your credentials and try again.",
           {
-            className: "custom-toast"
+            className: "custom-toast",
           }
         );
         return;
@@ -117,4 +113,3 @@ const Login = () => {
   );
 };
 export default Login;
-

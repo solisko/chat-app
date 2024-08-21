@@ -42,18 +42,18 @@ const Conversations = () => {
                 <tr className="bg-neutral-content" key={invite.conversationId}>
                   <td>
                     <div
-                      className="flex items-center gap-6 cursor-pointer"
+                      className="flex items-center gap-4 cursor-pointer"
                       onClick={() => handleSelectConversation(invite)}
                       role="button"
                       tabIndex="0"
                     >
-                      <div className="avatar w-14 h-14 rounded-full overflow-hidden">
+                      <div className="avatar flex-shrink-0 w-14 h-14 rounded-full overflow-hidden ">
                         <Avatar
                           avatarUrl={matchingUser?.avatar}
                           altText={`${invite.username}'s avatar`}
                         />
                       </div>
-                      <div>
+                      <div className="flex-1 min-w-0">
                         <div className="font-bold">{invite.username}</div>
                         <div className="text-sm opacity-50">Latest msg</div>
                       </div>

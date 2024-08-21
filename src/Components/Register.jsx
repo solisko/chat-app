@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
-  const { csrfToken, fetchCsrfToken } = useContext(ChatContext);
+  const { csrfToken } = useContext(ChatContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -13,10 +13,6 @@ const Register = () => {
   const [avatarFile, setAvatarFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    fetchCsrfToken();
-  }, []);
 
   const handleFileChange = (e) => {
     setAvatarFile(e.target.files[0]);

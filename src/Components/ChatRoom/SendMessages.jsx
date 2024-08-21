@@ -3,8 +3,7 @@ import { ChatContext } from "../../Context/ChatContextProvider";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 
 const SendMessages = () => {
-  const { jwtToken, fetchMessagesWithConversationId, selectedConversation } =
-    useContext(ChatContext);
+  const { selectedConversation, fetchMessagesWithConversationId } = useContext(ChatContext);
   const [newMsg, setNewMsg] = useState("");
 
   const sendMessage = async (conversationId) => {
@@ -28,7 +27,7 @@ const SendMessages = () => {
         throw new Error("Failed to send message");
       }
       const data = await response.json();
-      console.log(data.latestMessage.text);
+      // console.log(data.latestMessage.text);
       setNewMsg("");
       if (selectedConversation) {
         fetchMessagesWithConversationId(selectedConversation);

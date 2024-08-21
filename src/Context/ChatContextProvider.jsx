@@ -7,12 +7,13 @@ let uuid = self.crypto.randomUUID();
 
 export const ChatContext = createContext();
 
+const BASE_URL = import.meta.env.VITE_CHATIFY_URL;
+
 const ChatProvider = (props) => {
   const decodeToken = (token) => {
     try {
       const decoded = jwtDecode(token);
       // console.log("Decoded Token:", decoded);
-
       return {
         userId: decoded.id,
         username: decoded.user,
@@ -59,6 +60,25 @@ const ChatProvider = (props) => {
     };
   }, [jwtToken]);
 
+  useEffect(() => {
+    fetch(`${BASE_URL}/csrf`, {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch CSRF token");
+        }
+        return response.json();
+      })
+      .then((data) => setCsrfToken(data.csrfToken))
+      .catch((error) =>
+        console.error("Error fetching CSRF token:", error.message)
+      );
+  }, []);
+
   const startLogoutTimer = () => {
     clearTimeout(logoutTimer);
     const logoutTime = 30 * 60 * 1000; // 30 min
@@ -75,28 +95,10 @@ const ChatProvider = (props) => {
     logout();
   };
 
-  const fetchCsrfToken = async () => {
-    try {
-      const response = await fetch("https://chatify-api.up.railway.app/csrf", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Failed to fetch CSRF token");
-      }
-      const data = await response.json();
-      setCsrfToken(data.csrfToken);
-    } catch (error) {
-      console.error("Failed to fetch CSRF token:", error.message);
-    }
-  };
-
   const fetchMessagesWithUserId = async () => {
     try {
       const response = await fetch(
-        `https://chatify-api.up.railway.app/messages?userId=${user.userId}`,
+        `${BASE_URL}/messages?userId=${user.userId}`,
         {
           method: "GET",
           headers: {
@@ -121,7 +123,7 @@ const ChatProvider = (props) => {
   const fetchMessagesWithConversationId = async (conversationId) => {
     try {
       const response = await fetch(
-        `https://chatify-api.up.railway.app/messages?conversationId=${conversationId}`,
+        `${BASE_URL}/messages?conversationId=${conversationId}`,
         {
           method: "GET",
           headers: {
@@ -145,7 +147,7 @@ const ChatProvider = (props) => {
 
   const fetchAllUsers = async () => {
     try {
-      const response = await fetch("https://chatify-api.up.railway.app/users", {
+      const response = await fetch(`${BASE_URL}/users`, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -180,7 +182,7 @@ const ChatProvider = (props) => {
   // const inviteUserToChat = async () => {
   //   try {
   //     const response = await fetch(
-  //       `https://chatify-api.up.railway.app/invite/719`,
+  //       `${BASE_URL}/invite/719`,
   //       {
   //         method: "POST",
   //         headers: {
@@ -233,7 +235,6 @@ const ChatProvider = (props) => {
     <ChatContext.Provider
       value={{
         csrfToken,
-        fetchCsrfToken,
         jwtToken,
         isAuthenticated,
         login,
@@ -247,6 +248,7 @@ const ChatProvider = (props) => {
         selectedConversation,
         setSelectedConversation,
         getUserById,
+        BASE_URL,
       }}
     >
       {props.children}

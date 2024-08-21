@@ -24,10 +24,11 @@ function App() {
             </Route>
           </Routes>
           <ToastContainer
-            position="top-right"
+            position="top-center"
             pauseOnFocusLoss={false}
+            pauseOnHover={false}
             newestOnTop
-            // offset="x: 50, y: 10"
+            offset="y-10"
           />
         </Router>
       </ChatContextProvider>
