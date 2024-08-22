@@ -33,7 +33,7 @@ const SideNav = ({ isOpen, onClose }) => {
           className="btn btn-block btn-outline"
           onClick={handleProfileClick}
         >
-          Profile
+          Update Profile
         </Link>
       </div>
     </div>

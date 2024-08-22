@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
-  const { csrfToken } = useContext(ChatContext);
+  const { csrfToken, uploadAvatar, BASE_URL } = useContext(ChatContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -16,32 +16,6 @@ const Register = () => {
 
   const handleFileChange = (e) => {
     setAvatarFile(e.target.files[0]);
-  };
-
-  const uploadAvatar = async (file) => {
-    const formData = new FormData();
-    formData.append("image", file);
-
-    try {
-      const response = await fetch(
-        "https://api.imgbb.com/1/upload?key=869d77440f66db77da4ba88f816f8aa7",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error.message);
-      }
-      return data.data.url;
-    } catch (error) {
-      toast.error("Error uploading avatar: " + error.message, {
-        className: "custom-toast",
-      });
-      throw error;
-    }
   };
 
   const handleRegister = async (e) => {
@@ -56,7 +30,7 @@ const Register = () => {
       }
 
       const response = await fetch(
-        "https://chatify-api.up.railway.app/auth/register",
+        `${BASE_URL}/auth/register`,
         {
           method: "POST",
           headers: {

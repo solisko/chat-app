@@ -179,6 +179,31 @@ const ChatProvider = (props) => {
     }
   }, [isAuthenticated]);
 
+    const uploadAvatar = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const response = await fetch(
+        "https://api.imgbb.com/1/upload?key=869d77440f66db77da4ba88f816f8aa7",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error.message);
+      }
+      return data.data.url;
+    } catch (error) {
+      toast.error("Error uploading avatar: " + error.message, {
+        className: "custom-toast",
+      });
+      throw error;
+    }
+  };
   // const inviteUserToChat = async () => {
   //   try {
   //     const response = await fetch(
@@ -249,6 +274,7 @@ const ChatProvider = (props) => {
         setSelectedConversation,
         getUserById,
         BASE_URL,
+        uploadAvatar,
       }}
     >
       {props.children}
