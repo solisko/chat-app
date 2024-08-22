@@ -7,6 +7,7 @@ import Login from "./Components/Login";
 import Register from "./Components/Register";
 import Chat from "./Components/ChatRoom/Chat";
 import Profile from "./Components/Profile";
+import ShowSendMsg from "./Components/ChatRoom/ShowSendMsg";
 
 function App() {
   return (
@@ -19,8 +20,10 @@ function App() {
               <Route path="register" element={<Register />} />
             </Route>
             <Route element={<ProtectedRoute />}>
-              <Route path="/chat" element={<Chat />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/chat" element={<Chat />}>
+                <Route index element={<ShowSendMsg />} />
+                <Route path="profile" element={<Profile />} />
+              </Route>
             </Route>
           </Routes>
           <ToastContainer

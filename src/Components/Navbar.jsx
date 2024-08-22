@@ -18,7 +18,7 @@ const Navbar = () => {
   };
 
   const handleToggle = (e) => {
-    setTheme(e.target.checked ? "mytheme" : "retro");
+    setTheme(e.target.checked ? "synthwave" : "retro");
   };
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const Navbar = () => {
                 type="checkbox"
                 className="theme-controller"
                 onChange={handleToggle}
-                checked={theme === "mytheme"}
+                checked={theme === "synthwave"}
               />
               <svg
                 className="swap-off h-10 w-10 fill-current"

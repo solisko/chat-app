@@ -2,17 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-
 * {
   box-sizing: border-box;
 }
 
 .small-text {
-  font-size: 0.6rem; 
+  font-size: 0.6rem;
 }
 
 .hide-scroll {
-  overflow-y: scroll; 
+  overflow-y: scroll;
 }
 
 .hide-scroll::-webkit-scrollbar {
@@ -24,7 +23,7 @@
   scrollbar-width: none; /* Firefox */
 }
 
-.custom-toast{
+.custom-toast {
   background-color: oklch(var(--n));
   color: oklch(var(--nc));
 }
