@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Profile = () => {
-  const { jwtToken, user, logout, BASE_URL, uploadAvatar } =
+  const { jwtToken, user, logout, BASE_URL, uploadAvatar, setUser } =
     useContext(ChatContext);
   const [username, setUsername] = useState(user?.username || "");
   const [email, setEmail] = useState(user?.email || "");
@@ -53,14 +53,20 @@ const Profile = () => {
           },
         }),
       });
-
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Error: ${response.status} - ${errorText}`);
       }
+      const updatedUser = {
+        ...user,
+        username: username,
+        email: email,
+        avatar: avatarUrl,
+      };
+      setUser(updatedUser);
 
-      const result = await response.json();
-      console.log("User updated successfully:", result);
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+
       toast.success("Updated successfully! Get back to chatting!", {
         className: "custom-toast",
       });
@@ -100,7 +106,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="bg-base-200 w-full h-full shadow-xl relative">
+    <div className="bg-base-200 shadow-xl relative">
       <button
         className="absolute top-2 right-5 text-2xl focus:outline-none hover:text-red-400"
         onClick={() => navigate("/chat")}

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { ChatContext } from "../../Context/ChatContextProvider";
 import { TrashIcon } from "@heroicons/react/16/solid";
 import Avatar from "../Avatar";

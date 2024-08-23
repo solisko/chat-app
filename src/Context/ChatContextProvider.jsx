@@ -265,6 +265,7 @@ const ChatProvider = (props) => {
         login,
         logout,
         user,
+        setUser,
         fetchMessagesWithUserId,
         fetchMessagesWithConversationId,
         messages,
