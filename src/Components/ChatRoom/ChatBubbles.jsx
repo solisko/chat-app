@@ -3,7 +3,7 @@ import { ChatContext } from "../../Context/ChatContextProvider";
 import { TrashIcon } from "@heroicons/react/16/solid";
 import Avatar from "../Avatar";
 
-const Message = ({ message }) => {
+const ChatBubbles = ({ message }) => {
   const {
     user,
     jwtToken,
@@ -60,7 +60,7 @@ const Message = ({ message }) => {
             </time>
           </div>
           <div className="chat-bubble pr-6">
-            {message.text}
+            <p>{message.text}</p>
             <button
               onClick={() => deleteMessage(message.id)}
               className="absolute top-1 right-1 text-red-500 hover:text-red-700"
@@ -89,7 +89,7 @@ const Message = ({ message }) => {
             </time>
           </div>
           <div className="chat-bubble">
-            {message.text}
+            <p>{message.text}</p>
             <span className="absolute bottom-0 left-1 small-text opacity-50">
               {new Date(message.createdAt).toLocaleTimeString([], {
                 hour: "2-digit",
@@ -102,4 +102,4 @@ const Message = ({ message }) => {
     </div>
   );
 };
-export default Message;
+export default ChatBubbles;

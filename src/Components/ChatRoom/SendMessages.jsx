@@ -1,13 +1,20 @@
 import { useContext, useState } from "react";
 import { ChatContext } from "../../Context/ChatContextProvider";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
+import DOMPurify from "dompurify";
 
 const SendMessages = () => {
-  const { jwtToken, selectedConversation, fetchMessagesWithConversationId } = useContext(ChatContext);
+  const { jwtToken, selectedConversation, fetchMessagesWithConversationId } =
+    useContext(ChatContext);
   const [newMsg, setNewMsg] = useState("");
+
+  const sanitizeMessage = (message) => {
+    return DOMPurify.sanitize(message);
+  };
 
   const sendMessage = async (conversationId) => {
     try {
+      const sanitizedMsg = sanitizeMessage(newMsg);
       const response = await fetch(
         "https://chatify-api.up.railway.app/messages",
         {
@@ -17,7 +24,7 @@ const SendMessages = () => {
             Authorization: `Bearer ${jwtToken}`,
           },
           body: JSON.stringify({
-            text: newMsg,
+            text: sanitizedMsg,
             conversationId: conversationId,
           }),
         }
@@ -57,7 +64,7 @@ const SendMessages = () => {
         onSubmit={handleSendMessage}
       >
         <input
-          className="input flex-grow rounded-r-none focus:outline-none"
+          className="input resize-none flex-grow rounded-r-none focus:outline-none p-2"
           id="send"
           type="text"
           placeholder="Type here..."

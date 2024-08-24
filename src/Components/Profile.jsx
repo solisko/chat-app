@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { ChatContext } from "../Context/ChatContextProvider";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Avatar from "./Avatar";
 
 const Profile = () => {
   const { jwtToken, user, logout, BASE_URL, uploadAvatar, setUser } =
@@ -106,68 +107,69 @@ const Profile = () => {
   };
 
   return (
-    <div className="bg-base-200 shadow-xl relative">
-      <button
-        className="absolute top-2 right-5 text-2xl focus:outline-none hover:text-red-400"
-        onClick={() => navigate("/chat")}
-      >
-        &times;
-      </button>
-      <form className="card-body" onSubmit={updateUser}>
-        <h1 className="card-title text-center mb-6">
-          Update {user.username}'s user info
-        </h1>
-        <div className="flex items-center mb-6 justify-center">
-          <div className="avatar w-52 h-52 rounded-full overflow-hidden ring ring-primary ring-offset-base-100 ring-offset-2">
-            <img
-              src={avatarPreview}
-              alt="User Avatar"
-              className="object-cover w-full h-full"
+<div className="flex justify-center items-center h-full w-full">
+      <div className="bg-base-200 shadow-xl relative p-6 rounded-lg max-w-lg w-full">
+        <button
+          className="absolute top-2 right-5 text-2xl focus:outline-none hover:text-red-400"
+          onClick={() => navigate("/chat")}
+        >
+          &times;
+        </button>
+        <form className="card-body" onSubmit={updateUser}>
+          <h1 className="card-title text-center mb-6">
+            Update {user.username}'s user info
+          </h1>
+          <div className="flex items-center mb-6 justify-center">
+            <div className="avatar w-52 h-52 rounded-full overflow-hidden ring ring-primary ring-offset-base-100 ring-offset-2">
+              <Avatar
+                avatarUrl={avatarPreview}
+                altText={`${user.username}'s avatar`}
+              />
+            </div>
+          </div>
+          <div className="form-control">
+            <label className="label">Change avatar</label>
+            <input
+              type="file"
+              className="file-input input-bordered w-full"
+              accept="image/*"
+              onChange={handleAvatarChange}
+            />
+            <label className="label">Change username</label>
+            <input
+              type="text"
+              className="input input-bordered w-full"
+              placeholder={user.username}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <label className="label">Change email</label>
+            <input
+              type="email"
+              className="input input-bordered w-full"
+              placeholder={user.email}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-        </div>
-        <div className="form-control">
-          <label className="label">Change avatar</label>
-          <input
-            type="file"
-            className="file-input input-bordered w-full"
-            accept="image/*"
-            onChange={handleAvatarChange}
-          />
-          <label className="label">Change username</label>
-          <input
-            type="text"
-            className="input input-bordered w-full"
-            placeholder={user.username}
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <label className="label">Change email</label>
-          <input
-            type="email"
-            className="input input-bordered w-full"
-            placeholder={user.email}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="form-control mt-6">
+          <div className="form-control mt-6">
+            <button
+              type="submit"
+              className="btn btn-secondary"
+              disabled={loading}
+            >
+              {loading ? "Updating..." : "Update Profile"}
+            </button>
+          </div>
           <button
-            type="submit"
-            className="btn btn-secondary"
-            disabled={loading}
+            type="button"
+            className="btn btn-error mt-4"
+            onClick={deleteUser}
           >
-            {loading ? "Updating..." : "Update Profile"}
+            Delete Account
           </button>
-        </div>
-        <button
-          type="button"
-          className="btn btn-error mt-4"
-          onClick={deleteUser}
-        >
-          Delete Account
-        </button>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };
