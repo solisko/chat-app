@@ -27,6 +27,12 @@ const ChatProvider = (props) => {
     }
   };
 
+  const isTokenExpired = (token) => {
+    if (!token) return true;
+    const { exp } = jwtDecode(token);
+    return exp < Date.now() / 1000;
+  };
+
   const [jwtToken, setJwtToken] = useState(
     () => localStorage.getItem("jwtToken") || ""
   );
@@ -49,6 +55,12 @@ const ChatProvider = (props) => {
     setSelectedConversation(null);
     setMessages([]);
   };
+
+  useEffect(() => {
+    if (jwtToken && isTokenExpired(jwtToken)) {
+      handleLogout(false);
+    }
+  }, [jwtToken]);
 
   useEffect(() => {
     setIsAuthenticated(!!jwtToken);
@@ -83,15 +95,17 @@ const ChatProvider = (props) => {
     clearTimeout(logoutTimer);
     const logoutTime = 30 * 60 * 1000; // 30 min
     const newLogoutTimer = setTimeout(() => {
-      handleLogout();
+      handleLogout(true);
     }, logoutTime);
     setLogoutTimer(newLogoutTimer);
   };
 
-  const handleLogout = () => {
-    toast("You gone? Seems like it. Logging you out.", {
-      className: "custom-toast",
-    });
+  const handleLogout = (showToast = false) => {
+    if (showToast) {
+      toast("You gone? Seems like it. Logging you out.", {
+        className: "custom-toast",
+      });
+    }
     logout();
   };
 
@@ -179,7 +193,7 @@ const ChatProvider = (props) => {
     }
   }, [isAuthenticated]);
 
-    const uploadAvatar = async (file) => {
+  const uploadAvatar = async (file) => {
     const formData = new FormData();
     formData.append("image", file);
 
@@ -261,6 +275,7 @@ const ChatProvider = (props) => {
       value={{
         csrfToken,
         jwtToken,
+        isTokenExpired,
         isAuthenticated,
         login,
         logout,

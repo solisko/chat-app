@@ -16,20 +16,17 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        `${BASE_URL}/auth/token`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username,
-            password,
-            csrfToken,
-          }),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/auth/token`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          password,
+          csrfToken,
+        }),
+      });
       if (!response.ok) {
         const errorData = await response.json();
         toast.error(
@@ -98,9 +95,13 @@ const Login = () => {
               <button
                 className="btn btn-primary"
                 type="submit"
-                disabled={loading}
+                // disabled={loading}
               >
-                {loading ? "Logging in..." : "Login"}
+                {loading ? (
+                  <span className="loading loading-spinner"></span>
+                ) : (
+                  "Login"
+                )}
               </button>
             </div>
             <Link to="/register" className="btn btn-link">
@@ -113,3 +114,4 @@ const Login = () => {
   );
 };
 export default Login;
+

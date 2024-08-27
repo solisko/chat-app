@@ -15,7 +15,7 @@ const ShowMessages = () => {
   useEffect(scrollToBottom, [messages]);
 
   return (
-    <div className="flex-1 overflow-y-scroll p-4 mb-4">
+    <div className="flex-1 overflow-x-hidden p-4 mb-4">
       {messages.length === 0 ? (
         <p>No messages yet. Start the conversation!</p>
       ) : (

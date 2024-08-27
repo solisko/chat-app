@@ -8,6 +8,7 @@ const Register = () => {
   const { csrfToken, uploadAvatar, BASE_URL } = useContext(ChatContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState("");
   const [avatarFile, setAvatarFile] = useState(null);
@@ -20,6 +21,14 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      toast.info("Passwords do not match! Try again.", {
+        className: "custom-toast",
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -29,22 +38,19 @@ const Register = () => {
         setAvatar(avatarUrl);
       }
 
-      const response = await fetch(
-        `${BASE_URL}/auth/register`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username,
-            password,
-            email,
-            avatar: avatarUrl,
-            csrfToken,
-          }),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          password,
+          email,
+          avatar: avatarUrl,
+          csrfToken,
+        }),
+      });
       if (!response.ok) {
         const errorData = await response.json();
         toast.error(
@@ -127,13 +133,31 @@ const Register = () => {
               autoComplete="off"
               minLength={6}
             />
+            <label htmlFor="confirmPassword" className="label">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Repeat Password..."
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="input input-ghost w-full max-w-xs"
+              required
+              autoComplete="off"
+              minLength={6}
+            />
             <div className="form-control mt-9">
               <button
                 className="btn btn-primary"
                 type="submit"
-                disabled={loading}
+                // disabled={loading}
               >
-                {loading ? "Registrating..." : "Create account"}
+                {loading ? (
+                  <span className="loading loading-spinner"></span>
+                ) : (
+                  "Register"
+                )}
               </button>
             </div>
             <Link to="/" className="btn btn-link">

@@ -3,9 +3,10 @@ import { ChatContext } from "../Context/ChatContextProvider";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Avatar from "./Avatar";
+import DeleteModal from "./DeleteModal";
 
 const Profile = () => {
-  const { jwtToken, user, logout, BASE_URL, uploadAvatar, setUser } =
+  const { jwtToken, user, BASE_URL, uploadAvatar, setUser } =
     useContext(ChatContext);
   const [username, setUsername] = useState(user?.username || "");
   const [email, setEmail] = useState(user?.email || "");
@@ -26,9 +27,25 @@ const Profile = () => {
       setAvatarFile(file);
     }
   };
+  const hasChanges = () => {
+    return (
+      username !== user.username ||
+      email !== user.email ||
+      avatar !== user.avatar ||
+      avatarFile !== null
+    );
+  };
 
   const updateUser = async (e) => {
     e.preventDefault();
+
+    if (!hasChanges()) {
+      toast.info("Plz update something before submitting!", {
+        className: "custom-toast",
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -78,98 +95,71 @@ const Profile = () => {
     }
   };
 
-  const deleteUser = async () => {
-    if (window.confirm("Are you sure you want to delete your account?")) {
-      try {
-        const response = await fetch(`${BASE_URL}/users/${user.userId}`, {
-          method: "DELETE",
-          headers: {
-            Accept: "*/*",
-            Authorization: `Bearer ${jwtToken}`,
-          },
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Error: ${response.status} - ${errorText}`);
-        }
-
-        const result = await response.json();
-        console.log("User deleted successfully:", result);
-        toast.success("DELETED! Hope to see you back soon...", {
-          className: "custom-toast",
-        });
-        logout();
-      } catch (error) {
-        console.error("Error deleting user:", error);
-      }
-    }
-  };
-
   return (
-<div className="flex justify-center items-center h-full w-full">
-      <div className="bg-base-200 shadow-xl relative p-6 rounded-lg max-w-lg w-full">
+    <div className="bg-base-200 px-6 pt-10 pb-20 min-w-[400px] overflow-auto">
+      <div className="flex items-center justify-center mb-6 relative">
+        <h1 className="text-xl font-bold mt-4">Update your user info</h1>
         <button
-          className="absolute top-2 right-5 text-2xl focus:outline-none hover:text-red-400"
+          className=" absolute top-0 right-2 text-l font-bold focus:outline-none hover:text-red-400"
           onClick={() => navigate("/chat")}
         >
-          &times;
+          ✕
         </button>
-        <form className="card-body" onSubmit={updateUser}>
-          <h1 className="card-title text-center mb-6">
-            Update {user.username}'s user info
-          </h1>
-          <div className="flex items-center mb-6 justify-center">
-            <div className="avatar w-52 h-52 rounded-full overflow-hidden ring ring-primary ring-offset-base-100 ring-offset-2">
-              <Avatar
-                avatarUrl={avatarPreview}
-                altText={`${user.username}'s avatar`}
-              />
-            </div>
-          </div>
-          <div className="form-control">
-            <label className="label">Change avatar</label>
-            <input
-              type="file"
-              className="file-input input-bordered w-full"
-              accept="image/*"
-              onChange={handleAvatarChange}
-            />
-            <label className="label">Change username</label>
-            <input
-              type="text"
-              className="input input-bordered w-full"
-              placeholder={user.username}
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <label className="label">Change email</label>
-            <input
-              type="email"
-              className="input input-bordered w-full"
-              placeholder={user.email}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+      </div>
+      <form className="card-body" onSubmit={updateUser}>
+        <div className="flex items-center mb-8 justify-center">
+          <div className="avatar w-52 h-52 rounded-full overflow-hidden ring ring-primary ring-offset-base-100 ring-offset-2">
+            <Avatar
+              avatarUrl={avatarPreview}
+              altText={`${user.username}'s avatar`}
             />
           </div>
-          <div className="form-control mt-6">
+        </div>
+        <div className="form-control">
+          <label className="label">Change avatar</label>
+          <input
+            type="file"
+            className="file-input input-bordered w-full mb-6"
+            accept="image/*"
+            onChange={handleAvatarChange}
+          />
+          <label className="label">Change username</label>
+          <input
+            type="text"
+            className="input input-bordered w-full mb-6"
+            placeholder={user.username}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <label className="label">Change email</label>
+          <input
+            type="email"
+            className="input input-bordered w-full mb-6"
+            placeholder={user.email}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div className="form-control mt-6">
+          <div className="flex gap-6">
             <button
               type="submit"
-              className="btn btn-secondary"
+              className="btn btn-secondary flex-1"
               disabled={loading}
             >
               {loading ? "Updating..." : "Update Profile"}
             </button>
+            <button
+              type="button"
+              className="btn btn-error flex-1"
+              onClick={() => document.getElementById("my_modal_1").showModal()}
+            >
+              Delete Account
+            </button>
           </div>
-          <button
-            type="button"
-            className="btn btn-error mt-4"
-            onClick={deleteUser}
-          >
-            Delete Account
-          </button>
-        </form>
-      </div>
+        </div>
+      </form>
+      <DeleteModal />
     </div>
   );
 };

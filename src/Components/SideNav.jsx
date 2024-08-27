@@ -12,7 +12,7 @@ const SideNav = ({ isOpen, onClose }) => {
 
   return (
     <div
-      className={`fixed top-24 right-0 w-64 h-full bg-base-100 transform ${
+      className={`fixed top-24 right-0 w-80 h-full bg-base-100 transform ${
         isOpen ? "translate-x-0" : "translate-x-full"
       } transition-transform duration-300 ease-in-out shadow-lg z-50`}
       onClick={(e) => e.stopPropagation()}
@@ -30,7 +30,7 @@ const SideNav = ({ isOpen, onClose }) => {
         <h2 className="text-xl font-semibold mb-4 ">Hi {user.username}!</h2>
         <Link
           to="/chat/profile"
-          className="btn btn-block btn-outline"
+          className="btn btn-block btn-secondary"
           onClick={handleProfileClick}
         >
           Update Profile

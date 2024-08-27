@@ -31,7 +31,6 @@ function App() {
             pauseOnFocusLoss={false}
             pauseOnHover={false}
             newestOnTop
-            offset="y-10"
           />
         </Router>
       </ChatContextProvider>
