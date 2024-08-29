@@ -152,7 +152,7 @@ const ChatProvider = (props) => {
       }
 
       const data = await response.json();
-      // console.log("Fetched messages:", data);
+      console.log("Fetched messages:", data);
       setMessages(data);
     } catch (error) {
       console.error("Failed to fetch messages:", error.message);

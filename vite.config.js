@@ -7,6 +7,9 @@ export default defineConfig({
   plugins: [react(), sentryVitePlugin({
     org: "sofia-skommar",
     project: "javascript-react"
+  }), sentryVitePlugin({
+    org: "sofia-skommar",
+    project: "javascript-react"
   })],
 
   build: {
