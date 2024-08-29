@@ -57,6 +57,7 @@ function App() {
           />
         </Router>
       </ChatContextProvider>
+      return <button onClick={() => methodDoesNotExist()}>Break the world</button>;
     </div>
   );
 }
