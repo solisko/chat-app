@@ -3,6 +3,7 @@ import { ChatContext } from "../Context/ChatContextProvider";
 import SideNav from "./SideNav";
 import Avatar from "./Avatar";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import Invite from "./Invite";
 
 const Navbar = () => {
   const { user, allUsers } = useContext(ChatContext);
@@ -42,18 +43,12 @@ const Navbar = () => {
   }, [searchTerm, allUsers]);
 
   useEffect(() => {
-    // Eventlyssnare för klick utanför sökrutan
     const handleClickOutside = (e) => {
       if (searchRef.current && !searchRef.current.contains(e.target)) {
-        // Klick var inte inuti sökrutan eller dropdown
-        setSearchTerm(""); // Töm sökrutan
+        setSearchTerm("");
       }
     };
-
-    // Lägg till eventlyssnare när komponenten mountas
     document.addEventListener("mousedown", handleClickOutside);
-
-    // Ta bort eventlyssnare när komponenten unmountas
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -110,14 +105,15 @@ const Navbar = () => {
                 {filteredUsers.length > 0 && (
                   <ul
                     tabIndex={0}
-                    className="menu dropdown-content bg-base-200 rounded-box z-[1] mt-2 w-56 p-2 shadow"
+                    className="dropdown-content bg-base-100 rounded-box z-[1] mt-2 min-w-56 p-2 shadow max-h-96 overflow-y-auto"
                   >
                     {filteredUsers.map((user) => (
                       <li
                         key={user.userId}
-                        className="p-2 hover:bg-base-300 rounded cursor-pointer"
+                        className="p-2 hover:bg-base-300 rounded flex items-center justify-between overflow-auto"
                       >
                         {user.username}
+                        <Invite userId={user.userId} />
                       </li>
                     ))}
                   </ul>

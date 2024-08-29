@@ -103,7 +103,7 @@ const Conversations = () => {
                         {invite.username}
                       </div>
                       <div className="text-xs opacity-50 truncate text-ellipse">
-                        {latestMessages[invite.conversationId]?.text || "" }
+                        {latestMessages[invite.conversationId]?.text || ""}
                       </div>
                     </div>
                   </div>

@@ -2,9 +2,6 @@ import { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 
-let uuid = self.crypto.randomUUID();
-// console.log(uuid);
-
 export const ChatContext = createContext();
 
 const BASE_URL = import.meta.env.VITE_CHATIFY_URL;
@@ -48,7 +45,6 @@ const ChatProvider = (props) => {
   const [messages, setMessages] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [userMap, setUserMap] = useState({});
-  const [logoutTimer, setLogoutTimer] = useState(null);
   const [selectedConversation, setSelectedConversation] = useState(null);
 
   const resetState = () => {
@@ -58,18 +54,12 @@ const ChatProvider = (props) => {
 
   useEffect(() => {
     if (jwtToken && isTokenExpired(jwtToken)) {
-      handleLogout(false);
+      handleLogout();
     }
   }, [jwtToken]);
 
   useEffect(() => {
     setIsAuthenticated(!!jwtToken);
-    if (jwtToken) {
-      startLogoutTimer();
-    }
-    return () => {
-      clearTimeout(logoutTimer);
-    };
   }, [jwtToken]);
 
   useEffect(() => {
@@ -91,21 +81,10 @@ const ChatProvider = (props) => {
       );
   }, []);
 
-  const startLogoutTimer = () => {
-    clearTimeout(logoutTimer);
-    const logoutTime = 30 * 60 * 1000; // 30 min
-    const newLogoutTimer = setTimeout(() => {
-      handleLogout(true);
-    }, logoutTime);
-    setLogoutTimer(newLogoutTimer);
-  };
-
-  const handleLogout = (showToast = false) => {
-    if (showToast) {
-      toast("You gone? Seems like it. Logging you out.", {
-        className: "custom-toast",
-      });
-    }
+  const handleLogout = () => {
+    toast("Your session has expired. Please log in again.", {
+      className: "custom-toast",
+    });
     logout();
   };
 
@@ -218,31 +197,6 @@ const ChatProvider = (props) => {
       throw error;
     }
   };
-  // const inviteUserToChat = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       `${BASE_URL}/invite/719`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           Accept: "application/json",
-  //           Authorization: `Bearer ${jwtToken}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           conversationId: "ac2cacc8-60b9-4699-9a67-45164a009986",
-  //         }),
-  //       }
-  //     );
-  //     if (!response.ok) {
-  //       throw new Error("Failed to send invite");
-  //     }
-  //     const data = await response.json();
-  //     console.log("Invite sent successfully:", data);
-  //   } catch (error) {
-  //     console.error("Error inviting user:", error);
-  //   }
-  // };
 
   const login = async (token) => {
     setJwtToken(token);
@@ -254,14 +208,12 @@ const ChatProvider = (props) => {
       localStorage.setItem("user", JSON.stringify(userData));
       setIsAuthenticated(true);
       resetState();
-      startLogoutTimer();
     } else {
       console.error("Failed to decode user data from token");
     }
   };
 
   const logout = () => {
-    clearTimeout(logoutTimer);
     setJwtToken("");
     localStorage.removeItem("jwtToken");
     setUser(null);
