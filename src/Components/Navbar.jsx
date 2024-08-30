@@ -12,6 +12,7 @@ const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
   const searchRef = useRef(null);
+  const darkTheme = "mytheme";
 
   const handleAvatarClick = (e) => {
     e.stopPropagation();
@@ -23,7 +24,7 @@ const Navbar = () => {
   };
 
   const handleToggle = (e) => {
-    setTheme(e.target.checked ? "synthwave" : "retro");
+    setTheme(e.target.checked ? darkTheme : "retro");
   };
 
   useEffect(() => {
@@ -33,14 +34,16 @@ const Navbar = () => {
 
   useEffect(() => {
     if (searchTerm.trim() !== "") {
-      const results = allUsers.filter((user) =>
-        user.username.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      const results = allUsers
+        .filter((u) => u.userId !== user.userId)
+        .filter((u) =>
+          u.username.toLowerCase().includes(searchTerm.toLowerCase())
+        );
       setFilteredUsers(results);
     } else {
       setFilteredUsers([]);
     }
-  }, [searchTerm, allUsers]);
+  }, [searchTerm, allUsers, user.userId]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -65,7 +68,7 @@ const Navbar = () => {
                   type="checkbox"
                   className="theme-controller"
                   onChange={handleToggle}
-                  checked={theme === "synthwave"}
+                  checked={theme === darkTheme}
                 />
                 <svg
                   className="swap-off h-10 w-10 fill-current"

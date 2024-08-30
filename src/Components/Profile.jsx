@@ -96,7 +96,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="bg-base-200 px-6 pt-10 pb-20 min-w-[400px] overflow-auto">
+    <div className="bg-base-200 min-w-[400px] p-4 overflow-auto">
       <div className="flex items-center justify-center mb-6 relative">
         <h1 className="text-xl font-bold mt-4">Update your user info</h1>
         <button
@@ -119,14 +119,14 @@ const Profile = () => {
           <label className="label">Change avatar</label>
           <input
             type="file"
-            className="file-input input-bordered w-full mb-6"
+            className="file-input input-bordered w-full mb-4"
             accept="image/*"
             onChange={handleAvatarChange}
           />
           <label className="label">Change username</label>
           <input
             type="text"
-            className="input input-bordered w-full mb-6"
+            className="input input-bordered w-full mb-4"
             placeholder={user.username}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -134,7 +134,7 @@ const Profile = () => {
           <label className="label">Change email</label>
           <input
             type="email"
-            className="input input-bordered w-full mb-6"
+            className="input input-bordered w-full"
             placeholder={user.email}
             value={email}
             onChange={(e) => setEmail(e.target.value)}

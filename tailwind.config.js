@@ -6,39 +6,21 @@ export default {
   },
   plugins: [require("daisyui")],
   daisyui: {
-    themes: ["retro", "synthwave"],
+    themes: [
+      "retro",
+      {
+        mytheme: {
+          "primary": "#8b5654",
+          "secondary": "#0f766e",
+          "accent": "#fcd34d",
+          "neutral": "#ffedd5",
+          "base-100": "#44403c",
+          "info": "#4338ca",
+          "success": "#15803d",
+          "warning": "#ea580c",
+          "error": "#b91c1c",
+        },
+      },
+    ],
   },
 };
-
-// daisyui: {
-//   themes: [
-//     "retro",
-//     {
-//       mytheme: {
-//         "primary": "#a37572",
-//         "secondary": "#f6d860",
-//         "accent": "#ef9995",
-//         "neutral": "#bfb9ab",
-//         "base-100": "#141414",
-//       },
-//     },
-//   ],
-// },
-// };
-// daisyui: {
-//   themes: [
-//     {
-//       mytheme: {
-        
-// "primary": "#fcd34d",        
-// "secondary": "#fb923c",        
-// "accent": "#f43f5e",        
-// "neutral": "#44403c",        
-// "base-100": "#fef3c7",        
-// "info": "#60a5fa",        
-// "success": "#22c55e",        
-// "warning": "#f9a8d4",        
-// "error": "#b91c1c",        },
-//       },
-//     ],
-//   },

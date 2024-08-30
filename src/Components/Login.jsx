@@ -1,8 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { ChatContext } from "../Context/ChatContextProvider";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import * as Sentry from "@sentry/react";
 
 const Login = () => {
   const { csrfToken, login, BASE_URL } = useContext(ChatContext);
@@ -28,18 +29,39 @@ const Login = () => {
         }),
       });
       if (!response.ok) {
-        const errorData = await response.json();
-        toast.error(
-          errorData.error ||
-            "Login failed. Please check your credentials and try again.",
+        let errorMessage = "Login failed. Please try again.";
+        if (response.status === 401) {
+          errorMessage =
+            "Oh darn! Please check your credentials and try again.";
+        } else if (response.status === 500) {
+          errorMessage = "Server error. Please try again later.";
+        }
+        // misslyckad inloggning till Sentry
+        Sentry.captureMessage(
+          `Failed login attempt for user: ${username}. Error: ${errorMessage}`,
           {
-            className: "custom-toast",
+            level: "warning",
+            extra: {
+              status: response.status,
+              username,
+              errorMessage,
+            },
           }
         );
+        toast.error(errorMessage, {
+          className: "custom-toast",
+        });
         return;
       }
       const data = await response.json();
       await login(data.token);
+      // lyckat inloggning till Sentry
+      Sentry.captureMessage(`Successful login for user: ${username}`, {
+        level: "info",
+        extra: {
+          username,
+        },
+      });
       toast.success("👋 Hey you. Welcome to the chat...", {
         className: "custom-toast",
       });
@@ -47,6 +69,7 @@ const Login = () => {
         navigate("/chat");
       }, 1000);
     } catch (error) {
+      Sentry.captureException(error);
       toast.error("An unexpected error occurred. Please try again later.", {
         className: "custom-toast",
       });
@@ -114,4 +137,3 @@ const Login = () => {
   );
 };
 export default Login;
-
