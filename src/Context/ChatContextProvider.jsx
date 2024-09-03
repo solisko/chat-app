@@ -125,11 +125,9 @@ const ChatProvider = (props) => {
           },
         }
       );
-
       if (!response.ok) {
         throw new Error("Failed to fetch messages");
       }
-
       const data = await response.json();
       // console.log("Fetched messages:", data);
       setMessages(data);
@@ -153,7 +151,7 @@ const ChatProvider = (props) => {
       const data = await response.json();
       setAllUsers(data);
 
-      const userMap = {};
+      // const userMap = {};
       data.forEach((user) => {
         userMap[user.userId] = user;
         userMap[user.username] = user;

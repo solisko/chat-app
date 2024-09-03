@@ -15,8 +15,7 @@ const ChatBubbles = ({ message }) => {
 
   const isCurrentUser = message.userId === user.userId;
   const messageUser = getUserById(message.userId);
-
-  // console.log(messageUser)
+  
   const deleteMessage = async (messageId) => {
     try {
       const response = await fetch(

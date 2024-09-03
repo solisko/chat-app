@@ -10,10 +10,13 @@ const Conversations = () => {
     selectedConversation,
     setSelectedConversation,
     messages,
+    BASE_URL,
+    jwtToken,
   } = useContext(ChatContext);
   const navigate = useNavigate();
   const [invites, setInvites] = useState([]);
   const [latestMessages, setLatestMessages] = useState({});
+  // const [sentConversations, setSentConversations] = useState([]);
 
   useEffect(() => {
     let parsedInvites = [];
@@ -61,6 +64,26 @@ const Conversations = () => {
     setSelectedConversation(invite.conversationId);
     navigate("/chat");
   };
+
+  // const fetchSentInvites = async () => {
+  //   try {
+  //     const response = await fetch(`${BASE_URL}/conversations`, {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${jwtToken}`,
+  //       },
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch conversations");
+  //     }
+  //     const data = await response.json();
+  //     console.log("Fetched conversationIds:", data);
+  //     setSentConversations(data);
+  //   } catch (error) {
+  //     console.error("Failed to fetch conversations:", error.message);
+  //   }
+  // };
 
   return (
     <div className="fixed h-screen w-1/3 border-r border-base-200 flex flex-col overflow-hidden">
