@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ChatContext } from "../Context/ChatContextProvider";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -14,6 +14,9 @@ const Profile = () => {
   const [avatarPreview, setAvatarPreview] = useState(user?.avatar || "");
   const [avatarFile, setAvatarFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const fileInputRef = useRef(null);
+
   const navigate = useNavigate();
 
   const handleAvatarChange = (e) => {
@@ -27,6 +30,11 @@ const Profile = () => {
       setAvatarFile(file);
     }
   };
+
+  const handleAvatarClick = () => {
+    fileInputRef.current.click();
+  };
+
   const hasChanges = () => {
     return (
       username !== user.username ||
@@ -36,15 +44,19 @@ const Profile = () => {
     );
   };
 
+  useEffect(() => {
+    setIsButtonDisabled(!hasChanges());
+  }, [username, email, avatarFile]);
+
   const updateUser = async (e) => {
     e.preventDefault();
 
-    if (!hasChanges()) {
-      toast.info("Plz update something before submitting!", {
-        className: "custom-toast",
-      });
-      return;
-    }
+    // if (!hasChanges()) {
+    //   toast.info("Plz update something before submitting!", {
+    //     className: "custom-toast",
+    //   });
+    //   return;
+    // }
 
     setLoading(true);
 
@@ -82,9 +94,8 @@ const Profile = () => {
         avatar: avatarUrl,
       };
       setUser(updatedUser);
-
       localStorage.setItem("user", JSON.stringify(updatedUser));
-
+      
       toast.success("Updated successfully! Get back to chatting!", {
         className: "custom-toast",
       });
@@ -98,7 +109,7 @@ const Profile = () => {
   return (
     <div className="bg-base-200 min-w-[400px] p-4 overflow-auto">
       <div className="flex items-center justify-center mb-6 relative">
-        <h1 className="text-xl font-bold mt-4">Update your user info</h1>
+        <h1 className="text-xl font-bold mt-4">Update your account</h1>
         <button
           className=" absolute top-0 right-2 text-l font-bold focus:outline-none hover:text-red-400"
           onClick={() => navigate("/chat")}
@@ -108,7 +119,10 @@ const Profile = () => {
       </div>
       <form className="card-body" onSubmit={updateUser}>
         <div className="flex items-center mb-8 justify-center">
-          <div className="avatar w-52 h-52 rounded-full overflow-hidden ring ring-primary ring-offset-base-100 ring-offset-2">
+          <div
+            className="avatar cursor-pointer w-52 h-52 rounded-full overflow-hidden ring ring-primary ring-offset-base-100 ring-offset-2"
+            onClick={handleAvatarClick}
+          >
             <Avatar
               avatarUrl={avatarPreview}
               altText={`${user.username}'s avatar`}
@@ -119,7 +133,8 @@ const Profile = () => {
           <label className="label">Change avatar</label>
           <input
             type="file"
-            className="file-input input-bordered w-full mb-4"
+            ref={fileInputRef}
+            className="file-input input-bordered w-full mb-4 cursor-pointer"
             accept="image/*"
             onChange={handleAvatarChange}
           />
@@ -145,7 +160,7 @@ const Profile = () => {
             <button
               type="submit"
               className="btn btn-secondary flex-1"
-              disabled={loading}
+              disabled={loading || isButtonDisabled} // Inaktivera om ingen ändring
             >
               {loading ? "Updating..." : "Update Profile"}
             </button>

@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { ChatContext } from "../../Context/ChatContextProvider";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import DOMPurify from "dompurify";
+import { toast } from "react-toastify";
 
 const SendMessages = () => {
   const { jwtToken, selectedConversation, fetchMessagesWithConversationId } =
@@ -46,14 +47,21 @@ const SendMessages = () => {
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    if (newMsg.trim() !== "") {
-      if (selectedConversation) {
-        sendMessage(selectedConversation);
-      } else {
-        alert("No conversation selected!");
-      }
+
+    if (!selectedConversation && newMsg.trim() === "") {
+      toast.info("No conversation selected and message cannot be empty!", {
+        className: "custom-toast",
+      });
+    } else if (!selectedConversation) {
+      toast.info("No conversation selected!", {
+        className: "custom-toast",
+      });
+    } else if (newMsg.trim() === "") {
+      toast.info("Enter valid message!", {
+        className: "custom-toast",
+      });
     } else {
-      alert("Enter valid message!");
+      sendMessage(selectedConversation);
     }
   };
 

@@ -8,14 +8,13 @@ const Logout = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    toast("👋 Logging out. Catch you later!", {
+    toast.success("Logging out. Catch you later! ✌️", {
       className: "custom-toast",
     });
     setTimeout(() => {
       logout();
       navigate("/");
     }, 1000);
-
   };
   return (
     <button className="btn btn-primary w-1/2" onClick={handleLogout}>

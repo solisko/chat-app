@@ -110,13 +110,13 @@ const Navbar = () => {
                     tabIndex={0}
                     className="dropdown-content bg-base-100 rounded-box z-[1] mt-2 min-w-56 p-2 shadow max-h-96 overflow-y-auto"
                   >
-                    {filteredUsers.map((user) => (
+                    {filteredUsers.map((searchedUser) => (
                       <li
-                        key={user.userId}
+                        key={searchedUser.userId}
                         className="p-2 hover:bg-base-300 rounded flex items-center justify-between overflow-auto"
                       >
-                        {user.username}
-                        <Invite userId={user.userId} />
+                        {searchedUser.username}
+                        <Invite userId={searchedUser.userId} userName={searchedUser.username} />
                       </li>
                     ))}
                   </ul>

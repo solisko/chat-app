@@ -34,18 +34,24 @@ const ChatProvider = (props) => {
     () => localStorage.getItem("jwtToken") || ""
   );
   const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      return JSON.parse(savedUser);
+    }
     const savedToken = localStorage.getItem("jwtToken");
     if (savedToken) {
       return decodeToken(savedToken);
     }
     return null;
   });
+  
   const [csrfToken, setCsrfToken] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(!!jwtToken);
   const [messages, setMessages] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [userMap, setUserMap] = useState({});
   const [selectedConversation, setSelectedConversation] = useState(null);
+  const [sentInvites, setSentInvites] = useState([]);
 
   const resetState = () => {
     setSelectedConversation(null);
@@ -136,6 +142,26 @@ const ChatProvider = (props) => {
     }
   };
 
+  const fetchSentInvites = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/conversations`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch conversations");
+      }
+      const data = await response.json();
+      // console.log("Fetched conversationIds:", data);
+      setSentInvites(data);
+    } catch (error) {
+      console.error("Failed to fetch conversations:", error.message);
+    }
+  };
+
   const fetchAllUsers = async () => {
     try {
       const response = await fetch(`${BASE_URL}/users`, {
@@ -150,8 +176,6 @@ const ChatProvider = (props) => {
       }
       const data = await response.json();
       setAllUsers(data);
-
-      // const userMap = {};
       data.forEach((user) => {
         userMap[user.userId] = user;
         userMap[user.username] = user;
@@ -167,6 +191,7 @@ const ChatProvider = (props) => {
   useEffect(() => {
     if (isAuthenticated) {
       fetchAllUsers();
+      fetchSentInvites()
     }
   }, [isAuthenticated]);
 
@@ -242,6 +267,8 @@ const ChatProvider = (props) => {
         getUserById,
         BASE_URL,
         uploadAvatar,
+        sentInvites,
+        fetchSentInvites,
       }}
     >
       {props.children}

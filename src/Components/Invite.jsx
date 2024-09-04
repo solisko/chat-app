@@ -1,8 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import { ChatContext } from "../Context/ChatContextProvider";
+import { toast } from "react-toastify";
 
-const Invite = ({ userId }) => {
-  const { jwtToken, BASE_URL } = useContext(ChatContext);
+const Invite = ({ userId, userName }) => {
+  const { jwtToken, BASE_URL, fetchSentInvites } = useContext(ChatContext);
   const [isInvited, setIsInvited] = useState(false);
 
   useEffect(() => {
@@ -32,9 +33,14 @@ const Invite = ({ userId }) => {
       }
       const data = await response.json();
       // console.log("Invite sent successfully:", data);
-      const invitedUsers = JSON.parse(localStorage.getItem("invitedUsers")) || [];
+      toast.success(`Invited! Message ${userName} NOW! 💌`, {
+        className: "custom-toast",
+      });
+      const invitedUsers =
+        JSON.parse(localStorage.getItem("invitedUsers")) || [];
       invitedUsers.push(userId);
       localStorage.setItem("invitedUsers", JSON.stringify(invitedUsers));
+      fetchSentInvites();
       setIsInvited(true);
     } catch (error) {
       console.error("Error inviting user:", error);
