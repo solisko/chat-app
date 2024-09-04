@@ -214,8 +214,9 @@ const ChatProvider = (props) => {
   const logout = () => {
     setJwtToken("");
     localStorage.removeItem("jwtToken");
-    setUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("invitedUsers");
+    setUser(null);
     setIsAuthenticated(false);
     resetState();
   };
