@@ -9,14 +9,14 @@ const Conversations = () => {
     allUsers,
     selectedConversation,
     setSelectedConversation,
-    messages,
+    sentInvites,
     BASE_URL,
     jwtToken,
+    getUserById,
   } = useContext(ChatContext);
   const navigate = useNavigate();
   const [invites, setInvites] = useState([]);
-  const [latestMessages, setLatestMessages] = useState({});
-  // const [sentConversations, setSentConversations] = useState([]);
+  const [participants, setParticipants] = useState({});
 
   useEffect(() => {
     let parsedInvites = [];
@@ -42,61 +42,82 @@ const Conversations = () => {
   }, [user.invite, allUsers]);
 
   useEffect(() => {
-    const fetchLatestMessages = () => {
-      const messagesByConversationId = {};
-      messages.forEach((message) => {
-        const conversationId = message.conversationId;
-        if (
-          !messagesByConversationId[conversationId] ||
-          new Date(message.createdAt) >
-            new Date(messagesByConversationId[conversationId].createdAt)
-        ) {
-          messagesByConversationId[conversationId] = message;
-        }
-      });
-      setLatestMessages(messagesByConversationId);
+    const fetchConversationsAndParticipants = async () => {
+      try {
+        const fetchParticipantsPromises = sentInvites.map(
+          async (conversationId) => {
+            const messageResponse = await fetch(
+              `${BASE_URL}/messages?conversationId=${conversationId}`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${jwtToken}`,
+                },
+              }
+            );
+
+            if (!messageResponse.ok) {
+              throw new Error(
+                `Failed to fetch messages for conversation ${conversationId}`
+              );
+            }
+
+            const messages = await messageResponse.json();
+            const uniqueParticipants = [
+              ...new Set(messages.map((message) => message.userId)),
+            ];
+
+            setParticipants((prev) => ({
+              ...prev,
+              [conversationId]: uniqueParticipants,
+            }));
+          }
+        );
+
+        await Promise.all(fetchParticipantsPromises);
+      } catch (error) {
+        console.error(
+          "Failed to fetch conversations and participants:",
+          error.message
+        );
+      }
     };
 
-    fetchLatestMessages();
-  }, [messages]);
+    fetchConversationsAndParticipants();
+  }, [sentInvites, jwtToken]);
 
-  const handleSelectConversation = (invite) => {
-    setSelectedConversation(invite.conversationId);
-    navigate("/chat");
+  const getConversationParticipants = (conversationId) => {
+    const userIds = participants[conversationId] || [];
+    const uniqueUsernames = new Set();
+
+    userIds.forEach((userId) => {
+      const user = getUserById(userId);
+      if (user) {
+        uniqueUsernames.add(user.username);
+      }
+    });
+
+    return Array.from(uniqueUsernames).join(", ");
   };
 
-  // const fetchSentInvites = async () => {
-  //   try {
-  //     const response = await fetch(`${BASE_URL}/conversations`, {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${jwtToken}`,
-  //       },
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error("Failed to fetch conversations");
-  //     }
-  //     const data = await response.json();
-  //     console.log("Fetched conversationIds:", data);
-  //     setSentConversations(data);
-  //   } catch (error) {
-  //     console.error("Failed to fetch conversations:", error.message);
-  //   }
-  // };
+  const handleSelectConversation = (conversationId) => {
+    setSelectedConversation(conversationId);
+    navigate("/chat");
+  };
 
   return (
     <div className="fixed h-screen w-1/3 border-r border-base-200 flex flex-col overflow-hidden">
       <table className="table">
         <thead>
           <tr>
-            <th>Chats</th>
+            <th>Invites</th>
           </tr>
         </thead>
         <tbody>
           {invites.length === 0 ? (
             <tr>
-              <td className="text-center">You don't have any conversations!</td>
+              <td className="text-center">You don't have any invites!</td>
             </tr>
           ) : (
             invites.map((invite) => (
@@ -111,7 +132,9 @@ const Conversations = () => {
                 <td>
                   <div
                     className="flex items-center gap-4 cursor-pointer"
-                    onClick={() => handleSelectConversation(invite)}
+                    onClick={() =>
+                      handleSelectConversation(invite.conversationId)
+                    }
                     role="button"
                     tabIndex="0"
                   >
@@ -125,8 +148,51 @@ const Conversations = () => {
                       <div className="font-bold truncate">
                         {invite.username}
                       </div>
+                      <div className="text-xs opacity-50 truncate text-ellipse"></div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+      <table className="table mt-6">
+        <thead>
+          <tr>
+            <th>Sent Invites</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sentInvites.length === 0 ? (
+            <tr>
+              <td className="text-center">You haven't sent any invites!</td>
+            </tr>
+          ) : (
+            sentInvites.map((conversationId, index) => (
+              <tr
+                key={conversationId}
+                className={`${
+                  selectedConversation === conversationId ? "bg-base-200" : ""
+                } hover:bg-base-100 hover:brightness-90 hover:scale-105 transition-all duration-200`}
+              >
+                <td>
+                  <div
+                    className="flex items-center gap-4 cursor-pointer"
+                    onClick={() => handleSelectConversation(conversationId)}
+                    role="button"
+                    tabIndex="0"
+                  >
+                    {/* <div className="avatar flex-shrink-0 w-14 h-14 rounded-full overflow-hidden">
+                      <Avatar
+                        avatarUrl={null}
+                        altText={`Conversation ${index + 1}`}
+                      />
+                    </div> */}
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold truncate">Chat {index + 1}</div>
                       <div className="text-xs opacity-50 truncate text-ellipse">
-                        {latestMessages[invite.conversationId]?.text || ""}
+                        {getConversationParticipants(conversationId)}
                       </div>
                     </div>
                   </div>

@@ -7,9 +7,8 @@ const Home = () => {
         <div className="text-center lg:text-left">
           <h1 className="text-5xl font-bold">chatify</h1>
           <p className="py-6">
-            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-            excepturi exercitationem quasi. In deleniti eaque aut repudiandae et
-            a id nisi.
+            Connect effortlessly, chat securely - chatify - the ultimate app for all your
+            conversations.
           </p>
         </div>
         <Outlet />
