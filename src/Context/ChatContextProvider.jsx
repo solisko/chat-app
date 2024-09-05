@@ -255,6 +255,7 @@ const ChatProvider = (props) => {
         isAuthenticated,
         login,
         logout,
+        handleLogout,
         user,
         setUser,
         fetchMessagesWithUserId,

@@ -107,7 +107,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="bg-base-200 min-w-[400px] p-4 overflow-auto">
+    <div className="card bg-base-200 min-w-[400px] p-4 h-full">
       <div className="flex items-center justify-center mb-6 relative">
         <h1 className="text-xl font-bold mt-4">Update your account</h1>
         <button

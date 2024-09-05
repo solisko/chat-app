@@ -30,7 +30,6 @@ function App() {
   return (
     <div>
       <ChatContextProvider>
-        {/* <button onClick={() => methodDoesNotExist()}>Break the world</button>; */}
         <Router>
           <Routes>
             <Route path="/" element={<Home />}>

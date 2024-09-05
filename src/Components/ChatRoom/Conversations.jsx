@@ -145,7 +145,7 @@ const Conversations = () => {
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-bold truncate">
+                      <div className="font-bold truncate hidden sm:flex">
                         {invite.username}
                       </div>
                       <div className="text-xs opacity-50 truncate text-ellipse"></div>

@@ -100,7 +100,7 @@ const Navbar = () => {
                     id="search"
                     value={searchTerm}
                     placeholder="Find user to chat with!"
-                    className="input input-bordered w-48 md:w-auto pl-8 pr-2 focus:text-gray-600"
+                    className="input input-bordered pl-8 pr-2 focus:text-gray-600"
                     onChange={(e) => setSearchTerm(e.target.value)}
                     tabIndex={0}
                   />
