@@ -62,7 +62,7 @@ const Navbar = () => {
       <div className="fixed top-0 w-full z-50 bg-base-300 shadow-md">
         <div className="navbar flex items-center justify-between h-24 px-10">
           <div className="flex-1 flex justify-start items-center space-x-4 md:space-x-0">
-            <div className="hidden md:flex items-center">
+            <div className="items-center">
               <label className="swap swap-rotate">
                 <input
                   type="checkbox"
@@ -91,7 +91,7 @@ const Navbar = () => {
             <button className="btn btn-ghost mx-auto text-xl">chatify</button>
           </div>
           <div className="flex-1 flex justify-end items-center space-x-4">
-            <div className="form-control relative" ref={searchRef}>
+            <div className="form-control relative hidden sm:flex" ref={searchRef}>
               <div className="dropdown dropdown-end">
                 <div className="relative flex items-center text-gray-400">
                   <MagnifyingGlassIcon className="w-5 h-5 absolute ml-2" />
