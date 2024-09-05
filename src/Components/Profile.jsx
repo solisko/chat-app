@@ -95,7 +95,7 @@ const Profile = () => {
       };
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
-      
+
       toast.success("Updated successfully! Get back to chatting!", {
         className: "custom-toast",
       });
@@ -118,7 +118,7 @@ const Profile = () => {
         </button>
       </div>
       <form className="card-body" onSubmit={updateUser}>
-        <div className="flex items-center mb-8 justify-center">
+        <div className="flex items-center mb-6 justify-center">
           <div
             className="avatar cursor-pointer w-52 h-52 rounded-full overflow-hidden ring ring-primary ring-offset-base-100 ring-offset-2"
             onClick={handleAvatarClick}
@@ -134,14 +134,14 @@ const Profile = () => {
           <input
             type="file"
             ref={fileInputRef}
-            className="file-input input-bordered w-full mb-4 cursor-pointer"
+            className="file-input input-bordered w-full cursor-pointer"
             accept="image/*"
             onChange={handleAvatarChange}
           />
           <label className="label">Change username</label>
           <input
             type="text"
-            className="input input-bordered w-full mb-4"
+            className="input input-bordered w-full"
             placeholder={user.username}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
