@@ -107,101 +107,99 @@ const Conversations = () => {
   };
 
   return (
-    <div className="fixed h-screen w-1/3 border-r border-base-200 flex flex-col overflow-hidden">
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Invites</th>
-          </tr>
-        </thead>
-        <tbody>
-          {invites.length === 0 ? (
+    <div className="h-full w-1/3 border-r border-base-200 flex flex-col overflow-hidden">
+      <div className="flex-1 overflow-x-hidden">
+        <table className="table">
+          <thead>
             <tr>
-              <td className="text-center">You don't have any invites!</td>
+              <th>Invites</th>
             </tr>
-          ) : (
-            invites.map((invite) => (
-              <tr
-                key={invite.conversationId}
-                className={`${
-                  selectedConversation === invite.conversationId
-                    ? "bg-base-200"
-                    : ""
-                } hover:bg-base-100 hover:brightness-90 hover:scale-105 transition-all duration-200`}
-              >
-                <td>
-                  <div
-                    className="flex items-center gap-4 cursor-pointer"
-                    onClick={() =>
-                      handleSelectConversation(invite.conversationId)
-                    }
-                    role="button"
-                    tabIndex="0"
-                  >
-                    <div className="avatar flex-shrink-0 w-14 h-14 rounded-full overflow-hidden">
-                      <Avatar
-                        avatarUrl={invite.avatar}
-                        altText={`${invite.username}'s avatar`}
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-bold truncate hidden sm:flex">
-                        {invite.username}
-                      </div>
-                      <div className="text-xs opacity-50 truncate text-ellipse"></div>
-                    </div>
-                  </div>
-                </td>
+          </thead>
+          <tbody>
+            {invites.length === 0 ? (
+              <tr>
+                <td className="text-center">You don't have any invites!</td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-      <table className="table mt-6">
-        <thead>
-          <tr>
-            <th>Sent Invites</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sentInvites.length === 0 ? (
-            <tr>
-              <td className="text-center">You haven't sent any invites!</td>
-            </tr>
-          ) : (
-            sentInvites.map((conversationId, index) => (
-              <tr
-                key={conversationId}
-                className={`${
-                  selectedConversation === conversationId ? "bg-base-200" : ""
-                } hover:bg-base-100 hover:brightness-90 hover:scale-105 transition-all duration-200`}
-              >
-                <td>
-                  <div
-                    className="flex items-center gap-4 cursor-pointer"
-                    onClick={() => handleSelectConversation(conversationId)}
-                    role="button"
-                    tabIndex="0"
-                  >
-                    {/* <div className="avatar flex-shrink-0 w-14 h-14 rounded-full overflow-hidden">
-                      <Avatar
-                        avatarUrl={null}
-                        altText={`Conversation ${index + 1}`}
-                      />
-                    </div> */}
-                    <div className="flex-1 min-w-0">
-                      <div className="font-bold truncate">Chat {index + 1}</div>
-                      <div className="text-xs opacity-50 truncate text-ellipse">
-                        {getConversationParticipants(conversationId)}
+            ) : (
+              invites.map((invite) => (
+                <tr
+                  key={invite.conversationId}
+                  className={`${
+                    selectedConversation === invite.conversationId
+                      ? "bg-base-200"
+                      : ""
+                  } hover:bg-base-100 hover:brightness-90 hover:scale-105 transition-all duration-200`}
+                >
+                  <td>
+                    <div
+                      className="flex items-center gap-4 cursor-pointer"
+                      onClick={() =>
+                        handleSelectConversation(invite.conversationId)
+                      }
+                      role="button"
+                      tabIndex="0"
+                    >
+                      <div className="avatar flex-shrink-0 w-14 h-14 rounded-full overflow-hidden">
+                        <Avatar
+                          avatarUrl={invite.avatar}
+                          altText={`${invite.username}'s avatar`}
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-bold truncate hidden sm:flex">
+                          {invite.username}
+                        </div>
+                        <div className="text-xs opacity-50 truncate text-ellipse"></div>
                       </div>
                     </div>
-                  </div>
-                </td>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+        <table className="table mt-6">
+          <thead>
+            <tr>
+              <th>Sent Invites</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sentInvites.length === 0 ? (
+              <tr>
+                <td className="text-center">You haven't sent any invites!</td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              sentInvites.map((conversationId, index) => (
+                <tr
+                  key={conversationId}
+                  className={`${
+                    selectedConversation === conversationId ? "bg-base-200" : ""
+                  } hover:bg-base-100 hover:brightness-90 hover:scale-105 transition-all duration-200`}
+                >
+                  <td>
+                    <div
+                      className="flex items-center gap-4 cursor-pointer"
+                      onClick={() => handleSelectConversation(conversationId)}
+                      role="button"
+                      tabIndex="0"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="font-bold truncate">
+                          Chat {index + 1}
+                        </div>
+                        <div className="text-xs opacity-50 truncate text-ellipse">
+                          {getConversationParticipants(conversationId)}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

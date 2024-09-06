@@ -88,9 +88,9 @@ const ChatBubbles = ({ message }) => {
               {new Date(message.createdAt).toLocaleDateString()}
             </time>
           </div>
-          <div className="chat-bubble">
+          <div className="chat-bubble min-w-[50px]">
             <p>{message.text}</p>
-            <span className="absolute bottom-0 left-1 small-text opacity-50">
+            <span className="absolute bottom-0 left-1 small-text opacity-50 truncate">
               {new Date(message.createdAt).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",

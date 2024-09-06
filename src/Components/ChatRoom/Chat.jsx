@@ -36,9 +36,9 @@ const Chat = () => {
           <p className="ml-2">Loading chat...</p>
         </div>
       ) : (
-        <div className="flex h-full mt-24">
+        <div className="flex flex-1 mt-24 overflow-hidden">
           <Conversations />
-          <div className="w-2/3 ml-auto flex flex-col bg-base-200">
+          <div className="w-2/3 ml-auto flex flex-col bg-base-200 overflow-y-auto">
             <Outlet />
           </div>
         </div>

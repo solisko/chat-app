@@ -176,11 +176,14 @@ const ChatProvider = (props) => {
       }
       const data = await response.json();
       setAllUsers(data);
+
+      // const userMap = {};
       data.forEach((user) => {
         userMap[user.userId] = user;
         userMap[user.username] = user;
       });
       setUserMap(userMap);
+
     } catch (error) {
       console.error("Error fetching users:", error);
     }

@@ -3,14 +3,8 @@ import { ChatContext } from "../Context/ChatContextProvider";
 import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = () => {
-  const { isAuthenticated, jwtToken, handleLogout, isTokenExpired } =
+  const { isAuthenticated, jwtToken, isTokenExpired } =
     useContext(ChatContext);
-
-  useEffect(() => {
-    if (!isAuthenticated || isTokenExpired(jwtToken)) {
-      handleLogout();
-    }
-  }, [isAuthenticated, jwtToken, isTokenExpired, handleLogout]);
 
   if (!isAuthenticated || isTokenExpired(jwtToken)) {
     return <Navigate to="/" replace state={{ protectedRoute: true }} />;
