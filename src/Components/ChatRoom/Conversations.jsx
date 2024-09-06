@@ -21,24 +21,32 @@ const Conversations = () => {
   useEffect(() => {
     let parsedInvites = [];
 
-    if (user.invite !== null) {
+    if (user.invite) {
       try {
-        parsedInvites = JSON.parse(user.invite);
+        parsedInvites =
+          typeof user.invite === "string"
+            ? JSON.parse(user.invite)
+            : user.invite;
+        if (Array.isArray(parsedInvites)) {
+          const updatedInvites = parsedInvites.map((invite) => {
+            const matchingUser = allUsers.find(
+              (u) => u.username === invite.username
+            );
+            return {
+              ...invite,
+              userId: matchingUser?.id || null,
+              avatar: matchingUser?.avatar || null,
+            };
+          });
+
+          setInvites(updatedInvites);
+        } else {
+          console.error("Parsed invites are not an array");
+        }
       } catch (error) {
         console.error("Failed to parse invites:", error);
       }
     }
-
-    const updatedInvites = parsedInvites.map((invite) => {
-      const matchingUser = allUsers.find((u) => u.username === invite.username);
-      return {
-        ...invite,
-        userId: matchingUser?.id || null,
-        avatar: matchingUser?.avatar || null,
-      };
-    });
-
-    setInvites(updatedInvites);
   }, [user.invite, allUsers]);
 
   useEffect(() => {

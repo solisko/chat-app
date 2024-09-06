@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ChatContext } from "../Context/ChatContextProvider";
 import { toast } from "react-toastify";
@@ -21,23 +21,19 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
     if (password !== confirmPassword) {
       toast.info("Passwords do not match! Try again.", {
         className: "custom-toast",
       });
       return;
     }
-
     setLoading(true);
-
     try {
       let avatarUrl = avatar;
       if (avatarFile) {
         avatarUrl = await uploadAvatar(avatarFile);
         setAvatar(avatarUrl);
       }
-
       const response = await fetch(`${BASE_URL}/auth/register`, {
         method: "POST",
         headers: {
@@ -151,7 +147,6 @@ const Register = () => {
               <button
                 className="btn btn-primary"
                 type="submit"
-                // disabled={loading}
               >
                 {loading ? (
                   <span className="loading loading-spinner"></span>

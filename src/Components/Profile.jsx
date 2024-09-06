@@ -50,16 +50,7 @@ const Profile = () => {
 
   const updateUser = async (e) => {
     e.preventDefault();
-
-    // if (!hasChanges()) {
-    //   toast.info("Plz update something before submitting!", {
-    //     className: "custom-toast",
-    //   });
-    //   return;
-    // }
-
     setLoading(true);
-
     try {
       let avatarUrl = avatar;
 
@@ -67,7 +58,6 @@ const Profile = () => {
         avatarUrl = await uploadAvatar(avatarFile);
         setAvatar(avatarUrl);
       }
-
       const response = await fetch(`${BASE_URL}/user`, {
         method: "PUT",
         headers: {
@@ -160,7 +150,7 @@ const Profile = () => {
             <button
               type="submit"
               className="btn btn-secondary flex-1"
-              disabled={loading || isButtonDisabled} // Inaktivera om ingen ändring
+              disabled={loading || isButtonDisabled}
             >
               {loading ? "Updating..." : "Update Profile"}
             </button>

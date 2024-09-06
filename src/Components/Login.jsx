@@ -55,7 +55,7 @@ const Login = () => {
       }
       const data = await response.json();
       await login(data.token);
-      // lyckat inloggning till Sentry
+      // lyckad inloggning till Sentry
       Sentry.captureMessage(`Successful login for user: ${username}`, {
         level: "info",
         extra: {
@@ -118,7 +118,6 @@ const Login = () => {
               <button
                 className="btn btn-primary"
                 type="submit"
-                // disabled={loading}
               >
                 {loading ? (
                   <span className="loading loading-spinner"></span>

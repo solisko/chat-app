@@ -162,6 +162,36 @@ const ChatProvider = (props) => {
     }
   };
 
+  const fetchNewInvites = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/users/${user.userId}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch user data");
+      }
+      const data = await response.json();
+      if (data.length > 0) {
+        const fetchedInvites = JSON.parse(data[0].invite);
+        // console.log("Fetched invites:", fetchedInvites);
+          setUser((prevUser) => {
+          const updatedUser = {
+            ...prevUser,
+            invite: fetchedInvites,
+          };
+            localStorage.setItem("user", JSON.stringify(updatedUser));
+          return updatedUser;
+        });
+      }
+    } catch (error) {
+      console.error("Failed to fetch user data:", error.message);
+    }
+  };
+
   const fetchAllUsers = async () => {
     try {
       const response = await fetch(`${BASE_URL}/users`, {
@@ -195,13 +225,13 @@ const ChatProvider = (props) => {
     if (isAuthenticated) {
       fetchAllUsers();
       fetchSentInvites()
+      fetchNewInvites()
     }
   }, [isAuthenticated]);
 
   const uploadAvatar = async (file) => {
     const formData = new FormData();
     formData.append("image", file);
-
     try {
       const response = await fetch(
         "https://api.imgbb.com/1/upload?key=869d77440f66db77da4ba88f816f8aa7",
@@ -227,7 +257,6 @@ const ChatProvider = (props) => {
   const login = async (token) => {
     setJwtToken(token);
     localStorage.setItem("jwtToken", token);
-
     const userData = decodeToken(token);
     if (userData) {
       setUser(userData);

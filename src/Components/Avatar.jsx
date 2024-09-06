@@ -12,7 +12,6 @@ const isValidUrl = (url) => {
 const Avatar = ({ avatarUrl, altText, className = "object-cover" }) => {
   const avatarSrc =
     avatarUrl && isValidUrl(avatarUrl) ? avatarUrl : defaultAvatar;
-
   return <img src={avatarSrc} alt={altText} className={className} />;
 };
 export default Avatar;
